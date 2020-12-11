@@ -1,0 +1,12 @@
+@import "bootstrap/functions";
+@import "bootstrap/variables";
+@import "bootstrap/mixins";
+
+//our design team's custom theme
+@import "theme.scss";
+
+// All of bootstrap
+@import "bootstrap/bootstrap.scss";
+
+//our custom overrides
+@import "style.scss";

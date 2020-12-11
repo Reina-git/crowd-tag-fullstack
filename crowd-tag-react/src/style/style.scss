@@ -1,0 +1,194 @@
+/*
+
+I've included a class called .background-image that is how you can perfectly fill a webpage with a background image.
+(It's a pain in the butt to google this. I included the best link I found in the solution.)
+
+Then on your HTML file, create a div that wraps your entire content on the landing page and give it this class.
+
+Example:
+
+<div class="background-image">
+   <div class="container">
+      <!-- More html here -->
+   </div>
+</div>
+
+*/
+
+.thumbnail {
+  width: 200px;
+  height: 200px;
+}
+
+// .thumb-img {
+//    object-fit: cover;
+//    overflow: hidden;
+//    height: 150px;
+//    width: 150px;
+// }
+
+.img-square {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: 100%;
+}
+.img-square img {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+// .thumb-img-lg {
+//    object-fit: cover;
+//    overflow: hidden;
+//    height: 200px;
+//    width: 200px;
+// }
+.Logo-link {
+  color: #52535f;
+  text-decoration: none;
+}
+.Logo-link:hover {
+  color: #52535f;
+  text-decoration: none;
+}
+.Logo-link:focus,
+.Logo-link.focus {
+  text-decoration: none;
+}
+.Logo-link:disabled,
+.Logo-link.disabled {
+  color: #6c757d;
+  pointer-events: none;
+}
+
+.logo-font-size {
+  font-size: 24px;
+}
+
+.collection-link {
+  color: #52535f;
+  text-decoration: none;
+}
+.collection-link:hover {
+  color: #2f2f36;
+  text-decoration: underline;
+}
+.collecion-link:focus,
+.collecion-link.focus {
+  text-decoration: underline;
+}
+.collection-link:disabled,
+.collecion-link.disabled {
+  color: #6c757d;
+  pointer-events: none;
+}
+
+.remove-link {
+  color: #a20404;
+  text-decoration: none;
+}
+.remove-link:hover {
+  color: #750505;
+  text-decoration: underline;
+}
+.remove-link:focus,
+.remove-link.focus {
+  text-decoration: underline;
+}
+.remove-link:disabled,
+.collecion-link.disabled {
+  color: #6c757d;
+  pointer-events: none;
+}
+
+.font-family-brand {
+  font-family: $font-family-brand;
+}
+
+.primary-btn {
+  color: #52535f;
+}
+
+// #logo-text {
+//    @include media-breakpoint-only(xs) {
+//       font-size: 28px;
+//    }
+//    @include media-breakpoint-only(sm) {
+//       font-size: 40px;
+//    }
+
+//    @include media-breakpoint-up(md) {
+//       font-size: 50px;
+//    }
+// }
+#logo-text {
+  font-size: 28px;
+}
+.logo {
+  width: 30px;
+}
+
+// .logo {
+//    @include media-breakpoint-only(xs) {
+//       width: 24px;
+//    }
+//    @include media-breakpoint-only(sm) {
+//       width: 36px;
+//    }
+
+//    @include media-breakpoint-up(md) {
+//       width: 48px;
+//    }
+// }
+
+#rotate-right {
+  transform: rotate(270deg);
+}
+
+#rotate-left {
+  transform: rotate(90deg);
+}
+
+.tag-text {
+  font-size: 14px;
+  color: $primary;
+}
+.tag-text-remove {
+  font-size: 14px;
+  color: danger;
+}
+
+.file-name-text {
+  font-size: 12px;
+}
+
+// @include media-breakpoint-between(xs, sm) {
+//    .btn {
+//       @include button-size(
+//          $input-btn-padding-y-sm,
+//          $input-btn-padding-x-sm,
+//          $font-size-sm,
+//          $line-height-sm,
+//          $btn-border-radius-sm
+//       );
+//    }
+// }
+
+h2 {
+  color: $primary;
+}
+
+p {
+  color: $primary;
+}
+
+.btn-link {
+  margin-left: 0;
+  margin-right: 0;
+  border: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
