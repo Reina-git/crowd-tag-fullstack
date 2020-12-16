@@ -1,10 +1,16 @@
 const selectAllCollections = `
     SELECT
-        photos.id AS photo_id
-        collections.name AS collections_name
-        photos.image_url AS Image_url
-        xref_tag_photo.user_id AS user_created_tag
-        users.institution_name
+        photos.id AS photo_id,
+        collections.name AS collection_name,
+        photos.image_url AS Image_url,
+        tags.name AS tag_name,
+        tags.id AS tag_id,
+        xref_tag_photo.user_id AS user_created_tag,
+        users.institution_name,
+        collections.id AS collection_id,
+        uploaded_at,
+        collections.created_at AS collection_created_at,
+        users.id AS user_id
 
         FROM photos
         INNER JOIN
@@ -15,6 +21,6 @@ const selectAllCollections = `
         LEFT JOIN
         tags ON tags.id = tag_id
 
-    WHERE (collection_name LIKE ? OR  users.institution_name LIKE ?)
+    WHERE (collections.name LIKE ? OR  users.institution_name LIKE ?)
     `;
 module.exports = selectAllCollections;
