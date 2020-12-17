@@ -11,7 +11,6 @@
       "date-fns": "^2.16.1",
       "lodash": "^4.17.20",
       "node": "^15.0.1",
-      "object-has": "^1.0.2",
       "object-hash": "^2.0.3",
       "react": "^17.0.1",
       "react-dom": "^17.0.1",
@@ -25,11 +24,10 @@
       "web-vitals": "^0.2.4"
    },
    "scripts": {
-      "start": "react-scripts start",
-      "build": "react-scripts build && npm run cname && cd build && cp index.html 200.html && surge",
+      "start": "PORT=3005 react-scripts start",
+      "build": "react-scripts build",
       "test": "react-scripts test",
-      "eject": "react-scripts eject",
-      "cname": "echo crowd-tag.surge.sh > build/CNAME"
+      "eject": "react-scripts eject"
    },
    "eslintConfig": {
       "extends": [

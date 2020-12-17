@@ -43,7 +43,7 @@ router.get("/", (req, res) => {
 
          const unfinishedCollections = uniqBy(
             camelCaseCollections,
-            "institutionId"
+            "collectionId"
          ).map((collection) => {
             return {
                id: collection.collectionId,
@@ -54,7 +54,6 @@ router.get("/", (req, res) => {
                photos: [],
             };
          });
-         //  console.log(unfinishedCollections);
          const collectionsWithPhotos = unfinishedCollections.map(
             (collection) => {
                const collectionPhotos = camelCaseCollections
@@ -68,87 +67,75 @@ router.get("/", (req, res) => {
                         uploadedAt: collectionPhoto.photoUploadedAt,
                         fileName: "replaceMe", //write a function that gets the file name from the end of the URL
                         url: collectionPhoto.photoUrl,
-                        tags: [],
+                        tags: camelCaseCollections
+                           .map((camelCaseCollection) => {
+                              return {
+                                 id: camelCaseCollection.tagId,
+                                 userID: camelCaseCollection.userCreatedTag,
+                                 name: camelCaseCollection.tagName,
+                                 photoId: camelCaseCollection.photoId,
+                              };
+                           })
+                           .filter((tag) => {
+                              return (
+                                 collectionPhoto.photoId === tag.photoId &&
+                                 tag.id !== null
+                              );
+                           }),
                      };
                   });
+               const uniqCollectionPhotos = uniqBy(collectionPhotos, "id");
 
                return {
                   ...collection,
-                  photos: collectionPhotos,
+                  photos: uniqCollectionPhotos,
                };
             }
          );
-         const testCollectionPhotosTags = collectionsWithPhotos.map(
-            (testPhotoTag) => {
-               const test2Tags = testPhotoTag.photos.map((test2tag) => {
-                  console.log(test2tag.id);
-               });
-            }
-         );
 
-         const collectionsWithPhotosAndTags = collectionsWithPhotos.map(
-            (collectionWithPhotoAndTag) => {
-               const collectionPhotosTags = collectionWithPhotoAndTag.photos.map(
-                  (collectionPhotoTag) => {
-                     const photoTags = camelCaseCollections
-                        .filter((camelCaseCollection) => {
-                           return (
-                              camelCaseCollection.photoId ===
-                              collectionPhotoTag.id
-                           );
-                        })
-                        .map((photoTag) => {
-                           return {
-                              id: photoTag.tagId,
-                              userID: photoTag.userCreatedTag,
-                              name: photoTag.tagName,
-                           };
-                        });
+         //  const testPhotos = uniqBy(camelCaseCollections, "photoId").map(
+         //     (photo) => {
+         //        const tags = camelCaseCollections.map(() => {});
+         //        return {
+         //           id: photo.photoId,
+         //           collectionID: photo.collectionId,
+         //           uploadedAt: photo.photoUploadedAt,
+         //           fileName: "replaceMe", //write a function that gets the file name from the end of the URL
+         //           url: photo.photoUrl,
+         //           tags: [],
+         //        };
+         //     }
+         //  );
 
-                     return {
-                        ...collectionPhotoTag,
-                        tags: photoTags,
-                     };
-                  }
-               );
-               return collectionPhotosTags;
-            }
-         );
+         //  const collectionsWithPhotosAndTags = collectionsWithPhotos.map(
+         //     (collectionWithPhoto) => {
+         //        //  console.log("tagId", camelCaseCollections);
+         //        const photosTags = collectionWithPhoto.photos.map((photoTag) => {
+         //           //   console.log(photoTag);
+         //           const tags = camelCaseCollections
+         //              .filter((camelCaseCollection) => {
+         //                 return camelCaseCollection.photoId === photoTag.id;
+         //              })
+         //              .map((tag) => {
+         //                 return {
+         //                    id: tag.tagId,
+         //                    userID: tag.userCreatedTag,
+         //                    name: tag.tagName,
+         //                 };
+         //              });
+         //           return {
+         //              ...collectionWithPhoto,
 
-         //      const collectionsWithPhotosAndTags = collectionsWithPhotos.map(
-         //         (collectionWithPhotoAndTag) => {
-         // const CollectionsPhotosTags = collectionWithPhotoAndTag.photos.map((collectionPhotoTag) => {
-         //     const photoTags = camelCaseCollections
-         //               .filter((camelCaseCollection) => {
-         //                  const photo = collectionPhotoTag.photos;
-         //                   console.log(collectionPhotoTag.id);
-         //                  return (
-         //                     camelCaseCollection.photoId ===
-         //                     collectionPhotoTag.id
-         //                  );
-         //               })
-         //               .map((photoTag) => {
-         //                  return {
-         //                     id: photoTag.tagId,
-         //                     userID: photoTag.userCreatedTag,
-         //                     name: photoTag.tagName,
-         //                  };
-         //               });
-         //            return {
-         //               ...collectionPhotoTag,
-         //               tags: photoTags,
-         //            };
-         //         }
-
-         //  })
-
-         //      );
-
-         res.json(collectionsWithPhotosAndTags);
-         //  console.log(unfinishedCollections);
-         //  res.json(unfinishedCollections);
-         //  res.json(collectionsWithPhotosAndTags);
-         //  console.log(camelCaseCollections);
+         //              tags: tags,
+         //           };
+         //        });
+         //        return photosTags;
+         //     }
+         //  );
+         //  console.log(collectionsWithPhotosAndTags);
+         //  res.json(testPhotos);
+         //  res.json(camelCaseCollections);
+         res.json(collectionsWithPhotos);
       })
       .catch((err) => {
          console.log(err);
