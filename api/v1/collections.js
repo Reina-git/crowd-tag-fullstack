@@ -92,49 +92,6 @@ router.get("/", (req, res) => {
                };
             }
          );
-
-         //  const testPhotos = uniqBy(camelCaseCollections, "photoId").map(
-         //     (photo) => {
-         //        const tags = camelCaseCollections.map(() => {});
-         //        return {
-         //           id: photo.photoId,
-         //           collectionID: photo.collectionId,
-         //           uploadedAt: photo.photoUploadedAt,
-         //           fileName: "replaceMe", //write a function that gets the file name from the end of the URL
-         //           url: photo.photoUrl,
-         //           tags: [],
-         //        };
-         //     }
-         //  );
-
-         //  const collectionsWithPhotosAndTags = collectionsWithPhotos.map(
-         //     (collectionWithPhoto) => {
-         //        //  console.log("tagId", camelCaseCollections);
-         //        const photosTags = collectionWithPhoto.photos.map((photoTag) => {
-         //           //   console.log(photoTag);
-         //           const tags = camelCaseCollections
-         //              .filter((camelCaseCollection) => {
-         //                 return camelCaseCollection.photoId === photoTag.id;
-         //              })
-         //              .map((tag) => {
-         //                 return {
-         //                    id: tag.tagId,
-         //                    userID: tag.userCreatedTag,
-         //                    name: tag.tagName,
-         //                 };
-         //              });
-         //           return {
-         //              ...collectionWithPhoto,
-
-         //              tags: tags,
-         //           };
-         //        });
-         //        return photosTags;
-         //     }
-         //  );
-         //  console.log(collectionsWithPhotosAndTags);
-         //  res.json(testPhotos);
-         //  res.json(camelCaseCollections);
          res.json(collectionsWithPhotos);
       })
       .catch((err) => {
