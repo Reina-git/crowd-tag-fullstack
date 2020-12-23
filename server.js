@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const path = require("path");
 
+app.use(express.json());
+
 app.use("/api/v1/collections", require("./api/v1/collections"));
 app.use("/api/v1/users", require("./api/v1/users"));
 
