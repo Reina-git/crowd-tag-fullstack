@@ -17,6 +17,7 @@ class Image extends React.Component {
       this.state = {
          tagText: "",
          displayedTags: allTags,
+         isLoggedIn: "",
       };
       this.deleteTag = this.deleteTag.bind(this);
       this.setTagText = this.setTagText.bind(this);
