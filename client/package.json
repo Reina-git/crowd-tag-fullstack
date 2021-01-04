@@ -9,6 +9,7 @@
       "axios": "^0.21.0",
       "classnames": "^2.2.6",
       "date-fns": "^2.16.1",
+      "jwt-decode": "^3.1.2",
       "lodash": "^4.17.20",
       "node": "^15.0.1",
       "object-hash": "^2.0.3",

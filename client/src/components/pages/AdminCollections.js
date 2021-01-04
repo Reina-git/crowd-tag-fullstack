@@ -20,22 +20,6 @@ class AdminCollections extends React.Component {
          displayedCollections: allCollections,
       };
       this.deleteCollection = this.deleteCollection.bind(this);
-      //   axios
-      //     .get(
-      //       "https://raw.githubusercontent.com/Reina-git/Crowd-Tag-React/main/src/mock-data/nested-collections.json"
-      //     )
-      //     .then((res) => {
-      //       // handle success
-      //       // console.log("test", res.data);
-      //       props.dispatch({
-      //         type: actions.STORE_ALL_COLLECTIONS,
-      //         payload: res.data,
-      //       });
-      //     })
-      //     .catch((error) => {
-      //       // handle error
-      //       console.log(error);
-      //     });
    }
    componentDidMount() {
       axios
@@ -66,9 +50,7 @@ class AdminCollections extends React.Component {
       this.setState({
          displayedCollections: filteredCollections,
       });
-
       console.log("collection", collection);
-
       // console.log("filtered tags", filteredTags);
    }
 
@@ -101,18 +83,25 @@ class AdminCollections extends React.Component {
           
           */}
                {this.state.displayedCollections.map((collection) => {
-                  if (
-                     collection.userId ===
-                     "ef3d5c68-02c7-4959-864e-9ccafc402228"
-                  ) {
-                     return (
-                        <AdminCollectionUI
-                           collection={collection}
-                           key={collection.id}
-                           deleteCollection={this.deleteCollection}
-                        />
-                     );
-                  }
+                  // if (
+                  //    collection.userId ===
+                  //    "ef3d5c68-02c7-4959-864e-9ccafc402228"
+                  // ) {
+                  //    return (
+                  //       <AdminCollectionUI
+                  //          collection={collection}
+                  //          key={collection.id}
+                  //          deleteCollection={this.deleteCollection}
+                  //       />
+                  //    );
+                  // }
+                  return (
+                     <AdminCollectionUI
+                        collection={collection}
+                        key={collection.id}
+                        deleteCollection={this.deleteCollection}
+                     />
+                  );
                })}
             </div>
          </AppTemplate>
