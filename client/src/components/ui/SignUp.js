@@ -28,62 +28,6 @@ class SignUp extends React.Component {
          isNotLibraryUser: !this.state.isNotLibraryUser,
       });
    }
-
-   // async setEmailState(emailInput) {
-   //    const lowerCasedEmailInput = emailInput.toLowerCase();
-   //    if (emailInput === "") {
-   //       this.setState({
-   //          emailError: "Please enter your email address.",
-   //          hasEmailError: true,
-   //       });
-   //    } else if (EMAIL_REGEX.test(lowerCasedEmailInput) === false) {
-   //       this.setState({
-   //          emailError: "Please enter a valid email address.",
-   //          hasEmailError: true,
-   //       });
-   //    } else {
-   //       this.setState({ emailError: "", hasEmailError: false });
-   //    }
-   // }
-   // checkHasLocalPart(passwordInput, emailInput) {
-   //    const localPart = emailInput.split("@")[0];
-   //    if (localPart === "") return false;
-   //    else if (localPart.length < 4) return false;
-   //    else return passwordInput.includes(localPart);
-   //    // if (passwordInput.includes(localPart) return truse... else return false.... the above code means the same thing)
-   // }
-
-   // async setPasswordState(passwordInput, emailInput) {
-   //    console.log(passwordInput);
-   //    const uniqChars = [...new Set(passwordInput)];
-   //    console.log(uniqChars);
-   //    if (passwordInput === "") {
-   //       this.setState({
-   //          passwordError: "Please enter a password.",
-   //          hasPasswordError: true,
-   //       });
-   //    } else if (passwordInput.length < 9) {
-   //       this.setState({
-   //          passwordError: "Your password must be at least 9 characters.",
-   //          hasPasswordError: true,
-   //       });
-   //    } else if (this.checkHasLocalPart(passwordInput, emailInput)) {
-   //       this.setState({
-   //          passwordError:
-   //             "For your safety, your password cannot contain your email address.",
-   //          hasPasswordError: true,
-   //       });
-   //    } else if (uniqChars.length < 3) {
-   //       this.setState({
-   //          passwordError:
-   //             "For your safety, your password must contain at least 3 unique characters.",
-   //          hasPasswordError: true,
-   //       });
-   //    } else {
-   //       this.setState({ passwordError: "", hasPasswordError: false });
-   //    }
-   // }
-
    async validateAndCreateUser() {
       const emailInput = document.getElementById("sign-up-email-input").value;
       const passwordInput = document.getElementById("sign-up-password-input")
@@ -103,7 +47,7 @@ class SignUp extends React.Component {
          createdAt: Date.now(),
          institutionName: institutionName,
       };
-      console.log(currentUser);
+      // console.log(currentUser);
       axios
          .post("/api/v1/users", currentUser)
          .then((res) => {

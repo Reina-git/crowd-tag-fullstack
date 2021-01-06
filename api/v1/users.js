@@ -10,7 +10,7 @@ const getSignUpEmailError = require("../../validation/getSignUpEmailError");
 const getSignUpPasswordError = require("../../validation/getSignUpPasswordError");
 const getLoginEmailError = require("../../validation/getLoginEmailError");
 const getLoginPasswordError = require("../../validation/getLoginPasswordError");
-const jwt = require("jsonwebtoken");
+// const jwt = require("jsonwebtoken");
 
 router.post("/", async (req, res) => {
    const { id, email, password, createdAt, institutionName } = req.body;
@@ -74,10 +74,10 @@ router.post("/auth", async (req, res) => {
                createdAt: users[0].created_at,
                institutionName: users[0].institution_name,
             };
-            const accessToken = jwt.sign(user, process.env.JWT_ACCESS_SECRET, {
-               expiresIn: "1m",
-            });
-            res.status(200).json(accessToken);
+            // const accessToken = jwt.sign(user, process.env.JWT_ACCESS_SECRET, {
+            //    expiresIn: "100m",
+            // });
+            // res.status(200).json(accessToken);
          })
          .catch((err) => {
             console.log(err);

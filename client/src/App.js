@@ -12,32 +12,36 @@ import NotFound from "./components/pages/NotFound";
 import jwtDecode from "jwt-decode";
 import store from "./store/store";
 import actions from "./store/actions";
+// import axios from "axios";
 
-const authToken = localStorage.authToken;
-if (authToken) {
-   const currentTimeInSec = Date.now() / 1000;
-   const user = jwtDecode(authToken);
-   if (currentTimeInSec > user.exp) {
-      console.log("expiredToken");
-      store.dispatch({
-         type: actions.STORE_CURRENT_USER,
-         payload: {},
-      });
-   } else {
-      console.log("valid token");
-      store.dispatch({
-         type: actions.STORE_CURRENT_USER,
-         payload: user,
-      });
-      // set authorization headers
-      const currentUrl = window.location.pathname;
-      if (currentUrl === "/log-in") {
-         window.location.href = "/";
-      }
-   }
-} else {
-   console.log("no token");
-}
+// const authToken = localStorage.authToken;
+// if (authToken) {
+//    const currentTimeInSec = Date.now() / 1000;
+//    const user = jwtDecode(authToken);
+//    if (currentTimeInSec > user.exp) {
+//       console.log("expiredToken");
+//       store.dispatch({
+//          type: actions.STORE_CURRENT_USER,
+//          payload: {},
+//       });
+//       // delete axios.defaults.headers.common["x-auth-token"];
+//    } else {
+//       console.log("valid token");
+//       store.dispatch({
+//          type: actions.STORE_CURRENT_USER,
+//          payload: user,
+//       });
+//       // set authorization headers for every request
+//       // axios.defaults.headers.common["x-auth-token"] = authToken;
+//       const currentUrl = window.location.pathname;
+//       if (currentUrl === "/log-in") {
+//          window.location.href = "/";
+//       }
+//    }
+// } else {
+//    console.log("no token");
+// delete axios.defaults.headers.common["x-auth-token"];
+// }
 
 function App() {
    return (

@@ -15,9 +15,13 @@ Example:
 
 */
 
+html {
+   overflow-y: scroll;
+}
+
 .thumbnail {
-  width: 200px;
-  height: 200px;
+   width: 200px;
+   height: 200px;
 }
 
 // .thumb-img {
@@ -28,16 +32,16 @@ Example:
 // }
 
 .img-square {
-  position: relative;
-  overflow: hidden;
-  padding-bottom: 100%;
+   position: relative;
+   overflow: hidden;
+   padding-bottom: 100%;
 }
 .img-square img {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  overflow: hidden;
+   position: absolute;
+   height: 100%;
+   width: 100%;
+   object-fit: cover;
+   overflow: hidden;
 }
 
 // .thumb-img-lg {
@@ -47,69 +51,69 @@ Example:
 //    width: 200px;
 // }
 .Logo-link {
-  color: #52535f;
-  text-decoration: none;
+   color: #52535f;
+   text-decoration: none;
 }
 .Logo-link:hover {
-  color: #52535f;
-  text-decoration: none;
+   color: #52535f;
+   text-decoration: none;
 }
 .Logo-link:focus,
 .Logo-link.focus {
-  text-decoration: none;
+   text-decoration: none;
 }
 .Logo-link:disabled,
 .Logo-link.disabled {
-  color: #6c757d;
-  pointer-events: none;
+   color: #6c757d;
+   pointer-events: none;
 }
 
 .logo-font-size {
-  font-size: 24px;
+   font-size: 24px;
 }
 
 .collection-link {
-  color: #52535f;
-  text-decoration: none;
+   color: #52535f;
+   text-decoration: none;
 }
 .collection-link:hover {
-  color: #2f2f36;
-  text-decoration: underline;
+   color: #2f2f36;
+   text-decoration: underline;
 }
 .collecion-link:focus,
 .collecion-link.focus {
-  text-decoration: underline;
+   text-decoration: underline;
 }
 .collection-link:disabled,
 .collecion-link.disabled {
-  color: #6c757d;
-  pointer-events: none;
+   color: #6c757d;
+   pointer-events: none;
 }
 
 .remove-link {
-  color: #a20404;
-  text-decoration: none;
+   color: #a20404;
+   text-decoration: none;
 }
 .remove-link:hover {
-  color: #750505;
-  text-decoration: underline;
+   color: #750505;
+   text-decoration: underline;
 }
 .remove-link:focus,
 .remove-link.focus {
-  text-decoration: underline;
+   text-decoration: underline;
 }
 .remove-link:disabled,
 .collecion-link.disabled {
-  color: #6c757d;
-  pointer-events: none;
+   color: #6c757d;
+   pointer-events: none;
 }
 
 .font-family-brand {
-  font-family: $font-family-brand;
+   font-family: $font-family-brand;
 }
 
 .primary-btn {
-  color: #52535f;
+   color: #52535f;
 }
 
 // #logo-text {
@@ -125,10 +129,10 @@ Example:
 //    }
 // }
 #logo-text {
-  font-size: 28px;
+   font-size: 28px;
 }
 .logo {
-  width: 30px;
+   width: 30px;
 }
 
 // .logo {
@@ -145,24 +149,24 @@ Example:
 // }
 
 #rotate-right {
-  transform: rotate(270deg);
+   transform: rotate(270deg);
 }
 
 #rotate-left {
-  transform: rotate(90deg);
+   transform: rotate(90deg);
 }
 
 .tag-text {
-  font-size: 14px;
-  color: $primary;
+   font-size: 14px;
+   color: $primary;
 }
 .tag-text-remove {
-  font-size: 14px;
-  color: danger;
+   font-size: 14px;
+   color: danger;
 }
 
 .file-name-text {
-  font-size: 12px;
+   font-size: 12px;
 }
 
 // @include media-breakpoint-between(xs, sm) {
@@ -178,17 +182,17 @@ Example:
 // }
 
 h2 {
-  color: $primary;
+   color: $primary;
 }
 
 p {
-  color: $primary;
+   color: $primary;
 }
 
 .btn-link {
-  margin-left: 0;
-  margin-right: 0;
-  border: 0;
-  padding-left: 0;
-  padding-right: 0;
+   margin-left: 0;
+   margin-right: 0;
+   border: 0;
+   padding-left: 0;
+   padding-right: 0;
 }

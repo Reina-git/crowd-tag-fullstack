@@ -10,7 +10,9 @@ import actions from "../../store/actions";
 import without from "lodash/without";
 
 // const collection = nestedCollections[0];
+// const authToken = localStorage.authToken;
 
+// console.log("authToken", authToken);
 class AdminCollections extends React.Component {
    constructor(props) {
       super(props);
@@ -21,7 +23,7 @@ class AdminCollections extends React.Component {
       };
       this.deleteCollection = this.deleteCollection.bind(this);
    }
-   componentDidMount() {
+   setAdminCollections() {
       axios
          .get("/api/v1/collections")
          .then((res) => {
@@ -55,7 +57,7 @@ class AdminCollections extends React.Component {
    }
 
    render() {
-      const collection = this.props.allCollections;
+      // const collection = this.props.allCollections;
       return (
          <AppTemplate>
             <div className="row">

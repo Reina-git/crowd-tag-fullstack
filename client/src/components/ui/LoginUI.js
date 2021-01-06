@@ -5,6 +5,7 @@ import axios from "axios";
 import actions from "../../store/actions";
 import { connect } from "react-redux";
 import jwtDecode from "jwt-decode";
+
 class Login extends React.Component {
    constructor(props) {
       super(props);
@@ -41,6 +42,7 @@ class Login extends React.Component {
                type: actions.STORE_CURRENT_USER,
                payload: user,
             });
+            // axios.defaults.headers.common["x-auth-token"] = authToken;
             if (res.data.institutionName === "") {
                this.props.history.push("/");
             } else if (res.data.institutionName !== "") {
