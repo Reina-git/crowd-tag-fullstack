@@ -42,7 +42,8 @@ class Login extends React.Component {
                type: actions.STORE_CURRENT_USER,
                payload: user,
             });
-            // axios.defaults.headers.common["x-auth-token"] = authToken;
+
+            axios.defaults.headers.common["x-auth-token"] = authToken;
             if (res.data.institutionName === "") {
                this.props.history.push("/");
             } else if (res.data.institutionName !== "") {

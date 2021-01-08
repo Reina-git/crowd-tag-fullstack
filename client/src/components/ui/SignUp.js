@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import axios from "axios";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
+import jwtDecode from "jwt-decode";
 
 class SignUp extends React.Component {
    constructor(props) {
@@ -28,7 +29,7 @@ class SignUp extends React.Component {
          isNotLibraryUser: !this.state.isNotLibraryUser,
       });
    }
-   async validateAndCreateUser() {
+   validateAndCreateUser() {
       const emailInput = document.getElementById("sign-up-email-input").value;
       const passwordInput = document.getElementById("sign-up-password-input")
          .value;
@@ -40,7 +41,7 @@ class SignUp extends React.Component {
             .value;
       }
       // create user obj
-      const currentUser = {
+      const user = {
          id: getUuid(),
          email: emailInput,
          password: passwordInput,
@@ -49,14 +50,18 @@ class SignUp extends React.Component {
       };
       // console.log(currentUser);
       axios
-         .post("/api/v1/users", currentUser)
+         .post("/api/v1/users", user)
          .then((res) => {
-            // console.log("this is res.data", res.data);
+            const authToken = res.data;
+            console.log(authToken);
+            localStorage.setItem("authToken", authToken);
+            const user = jwtDecode(authToken);
             this.props.dispatch({
                type: actions.STORE_CURRENT_USER,
-               payload: res.data,
+               payload: user,
             });
-            // CHANGE so that it checks state instead of res.data?
+
+            axios.defaults.headers.common["x-auth-token"] = authToken;
             if (res.data.institutionName === "") {
                this.props.history.push("/");
             } else if (res.data.institutionName !== "") {
@@ -64,8 +69,9 @@ class SignUp extends React.Component {
             }
          })
          .catch((err) => {
+            console.log(err);
             const data = err.response.data;
-            // console.log(data);
+
             const { emailError, passwordError } = data;
             if (emailError !== "") {
                this.setState({ hasEmailError: true, emailError: emailError });
