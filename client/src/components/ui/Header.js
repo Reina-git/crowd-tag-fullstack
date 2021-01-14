@@ -20,7 +20,7 @@ class Header extends React.Component {
       });
       this.props.dispatch({
          type: actions.STORE_ALL_COLLECTIONS,
-         payload: {},
+         payload: [],
       });
    }
 

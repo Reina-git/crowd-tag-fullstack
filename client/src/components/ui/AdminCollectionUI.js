@@ -14,13 +14,13 @@ function AdminCollectionUI(props) {
       props.history.push("/admin-add-photo-collection");
    }
    return (
-      <div className="row mt-6">
-         <div
-            className="col-12 col-sm-4"
-            onClick={() => {
-               goToCollection();
-            }}
-         >
+      <div
+         className="row mt-8"
+         onClick={() => {
+            goToCollection();
+         }}
+      >
+         <div className="col-4 col-sm-4">
             <div className="img-square">
                <img
                   src={props.collection.photos[0].url}
@@ -44,7 +44,7 @@ function AdminCollectionUI(props) {
                {toDisplayDate(props.collection.createdAt, "MMM. d, yyy")}
             </p>
          </div>
-         <div className="col-6 col-sm-2">
+         <div className="col-2 col-sm-2">
             <button
                to=""
                className="remove-link float-right btn"

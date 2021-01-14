@@ -6,7 +6,7 @@ import actions from "../../store/actions";
 
 function CollectionUI(props) {
    function goToCollection() {
-      console.log("Going to collection");
+      // console.log("Going to collection");
       props.dispatch({
          type: actions.STORE_SELECTED_COLLECTION,
          payload: props.collection,

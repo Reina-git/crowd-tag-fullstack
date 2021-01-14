@@ -79,6 +79,12 @@ class Image extends React.Component {
    // setTagsDisplay() {
    //   const copyOfDisplayedTags = [...this.state.displayedTags];
    // }
+   backToCollection() {
+      return console.log(
+         "back to collections button",
+         this.props.photo.prevRoute
+      );
+   }
 
    render() {
       // console.log("props on image page", this.props.photo);
@@ -88,7 +94,12 @@ class Image extends React.Component {
          <AppTemplate>
             <div className="row">
                <div className="col mt-6 mb-n2">
-                  <Link to="/collection" className="collection-link">
+                  <button
+                     className="collection-link"
+                     onClick={() => {
+                        this.backToCollection();
+                     }}
+                  >
                      <img
                         src={BackArrow}
                         width="20px"
@@ -96,7 +107,7 @@ class Image extends React.Component {
                         alt=""
                      />
                      Back to collection
-                  </Link>
+                  </button>
                </div>
             </div>
             {/* <!-- Main Image--> */}

@@ -88,17 +88,17 @@ class AdminCollections extends React.Component {
                </div>
             </div>
 
-            <div className="row">
-               {this.state.displayedCollections.map((collection) => {
-                  return (
-                     <AdminCollectionUI
-                        collection={collection}
-                        key={collection.id}
-                        deleteCollection={this.deleteCollection}
-                     />
-                  );
-               })}
-            </div>
+            {/* <div className="row"> */}
+            {this.state.displayedCollections.map((collection) => {
+               return (
+                  <AdminCollectionUI
+                     collection={collection}
+                     key={collection.id}
+                     deleteCollection={this.deleteCollection}
+                  />
+               );
+            })}
+            {/* </div> */}
          </AppTemplate>
       );
    }
