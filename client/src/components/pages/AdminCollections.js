@@ -2,15 +2,11 @@ import React from "react";
 import AppTemplate from "../ui/AppTemplate";
 import { Link } from "react-router-dom";
 import AddIcon from "../../icons/icon-add.svg";
-// import { nestedCollections } from "../../mock-data/nestedCollections";
 import AdminCollectionUI from "../ui/AdminCollectionUI";
 import axios from "axios";
 import { connect } from "react-redux";
 import actions from "../../store/actions";
 import without from "lodash/without";
-
-// const collection = nestedCollections[0];
-// const authToken = localStorage.authToken;
 
 // console.log("authToken", authToken);
 class AdminCollections extends React.Component {
@@ -23,9 +19,24 @@ class AdminCollections extends React.Component {
       };
       this.deleteCollection = this.deleteCollection.bind(this);
    }
+
+   componentDidMount() {
+      console.log("component did mount");
+
+      this.setAdminCollections();
+   }
+
+   componentDidUpdate(prevProps) {
+      if (this.props.allCollections !== prevProps.allCollections) {
+         this.setState({
+            displayedCollections: this.props.allCollections,
+         });
+      }
+   }
+
    setAdminCollections() {
       axios
-         .get("/api/v1/collections")
+         .get("/api/v1/adminAllCollections")
          .then((res) => {
             // handle success
             // console.log("test", res.data);
@@ -41,18 +52,18 @@ class AdminCollections extends React.Component {
    }
 
    deleteCollection(collection) {
-      console.log("inside delete function");
+      // console.log("inside delete function");
       const deletedCollection = collection;
-      console.log(" deletedCollection", deletedCollection);
+      // console.log(" deletedCollection", deletedCollection);
       const collections = this.state.displayedCollections;
-      console.log("collection", collection);
+      // console.log("collection", collection);
       const filteredCollections = without(collections, deletedCollection);
-      console.log("filteredCollections", filteredCollections);
+      // console.log("filteredCollections", filteredCollections);
       //
       this.setState({
          displayedCollections: filteredCollections,
       });
-      console.log("collection", collection);
+      // console.log("collection", collection);
       // console.log("filtered tags", filteredTags);
    }
 
@@ -78,25 +89,7 @@ class AdminCollections extends React.Component {
             </div>
 
             <div className="row">
-               {/* 
-          
-          NEED TO UPDATE THE COLLECTION.USERID WITH THE CURRENT USER.ID
-          
-          
-          */}
                {this.state.displayedCollections.map((collection) => {
-                  // if (
-                  //    collection.userId ===
-                  //    "ef3d5c68-02c7-4959-864e-9ccafc402228"
-                  // ) {
-                  //    return (
-                  //       <AdminCollectionUI
-                  //          collection={collection}
-                  //          key={collection.id}
-                  //          deleteCollection={this.deleteCollection}
-                  //       />
-                  //    );
-                  // }
                   return (
                      <AdminCollectionUI
                         collection={collection}

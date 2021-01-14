@@ -44,9 +44,11 @@ class Login extends React.Component {
             });
 
             axios.defaults.headers.common["x-auth-token"] = authToken;
-            if (res.data.institutionName === "") {
+            // console.log("res.data", res.data);
+            // console.log("user", user);
+            if (user.institutionName === "") {
                this.props.history.push("/");
-            } else if (res.data.institutionName !== "") {
+            } else if (user.institutionName !== "") {
                this.props.history.push("/admin-collections");
             }
          })
@@ -104,7 +106,8 @@ class Login extends React.Component {
 
                <div className="input-group mb-3 mt-2">
                   <input
-                     type="text"
+                     type="password"
+                     name="password"
                      aria-label="Sizing example input"
                      id="password-input"
                      aria-describedby="inputGroup-sizing-default"

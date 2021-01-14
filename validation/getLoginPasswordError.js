@@ -16,12 +16,12 @@ function checkIsValidUser(email, password) {
    return db
       .query(selectUserByEmail, email)
       .then(async (users) => {
-         console.log(users); //remove
+         // console.log(users); //remove
          const user = users[0];
          const isValidUser = await bcrypt
             .compare(password, user.password)
             .then((isValidUser) => {
-               console.log(isValidUser); //remove
+               // console.log(isValidUser); //remove
                return isValidUser;
             })
             .catch((err) => {
