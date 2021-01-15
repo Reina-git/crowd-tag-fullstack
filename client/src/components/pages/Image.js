@@ -13,11 +13,12 @@ import without from "lodash/without";
 class Image extends React.Component {
    constructor(props) {
       super(props);
-      const allTags = this.props.photo.tags;
+      const allTags = this.props.selectedPhoto.photo.tags;
       this.state = {
          tagText: "",
          displayedTags: allTags,
          isLoggedIn: "",
+         photo: this.props.selectedPhoto.photo,
       };
       this.deleteTag = this.deleteTag.bind(this);
       this.setTagText = this.setTagText.bind(this);
@@ -36,14 +37,6 @@ class Image extends React.Component {
       console.log("tag", filteredTags);
       // console.log("filtered tags", filteredTags);
    }
-
-   // addTag(e) {
-   //   if (e.keyCode === 13) {
-   //     const addNewTag = e.target.value;
-   //     console.log(addNewTag);
-   //     this.setState({ tagText: addNewTag });
-   //   }
-   // }
 
    addTag(e) {
       if (e.keyCode === 13) {
@@ -76,26 +69,29 @@ class Image extends React.Component {
       this.setState({ tagText: e.target.value });
    }
 
-   // setTagsDisplay() {
-   //   const copyOfDisplayedTags = [...this.state.displayedTags];
-   // }
    backToCollection() {
-      return console.log(
-         "back to collections button",
-         this.props.photo.prevRoute
-      );
+      console.log("back to collections", this.props.selectedPhoto.prevRoute);
+      if (this.props.selectedPhoto.prevRoute === "/collection") {
+         this.props.history.push("/collection");
+      }
+      if (
+         this.props.selectedPhoto.prevRoute === "/admin-add-photo-collection"
+      ) {
+         this.props.history.push("/admin-add-photo-collection");
+      }
    }
 
    render() {
       // console.log("props on image page", this.props.photo);
-      const photo = this.props.photo;
+      const photo = this.props.selectedPhoto.photo;
+      console.log("photo", photo);
 
       return (
          <AppTemplate>
             <div className="row">
                <div className="col mt-6 mb-n2">
                   <button
-                     className="collection-link"
+                     className="btn btn-link"
                      onClick={() => {
                         this.backToCollection();
                      }}
@@ -165,7 +161,6 @@ class Image extends React.Component {
                      id="tagText"
                      value={this.state.tagText}
                      onKeyDown={this.addTag}
-                     // onChange={this.setTagText}
                      onChange={(e) => this.setTagText(e)}
                   />
                </div>
@@ -204,7 +199,7 @@ class Image extends React.Component {
 }
 function mapStateToProps(state) {
    return {
-      photo: state.selectedPhoto,
+      selectedPhoto: state.selectedPhoto,
       displayedTag: state.displayedTag,
    };
 }

@@ -10,7 +10,10 @@ function AdminPhotoThumbnail(props) {
       console.log("Going to photo");
       props.dispatch({
          type: actions.STORE_SELECTED_PHOTO,
-         payload: props.photo,
+         payload: {
+            photo: props.photo,
+            prevRoute: "/admin-add-photo-collection",
+         },
       });
       props.history.push("/image");
    }
