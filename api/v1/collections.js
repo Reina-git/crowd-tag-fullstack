@@ -9,7 +9,7 @@ const uniqBy = require("lodash/uniqBy");
 const validateJwt = require("../../utils/validatejwt");
 
 router.get("/", (req, res) => {
-   console.log(req.query);
+   // console.log("req.query collections", req.query);
    const { searchTerm, order } = req.query;
    let constructedSearchTerm;
    if (searchTerm === "" || searchTerm === undefined) {
@@ -17,7 +17,7 @@ router.get("/", (req, res) => {
    } else {
       constructedSearchTerm = `%${searchTerm}%`;
    }
-   console.log(constructedSearchTerm);
+   // console.log(constructedSearchTerm);
    /* https://www.npmjs.com/package/mysql#escaping-query-values */
    db.query(selectAllCollections, [
       constructedSearchTerm,
@@ -41,7 +41,7 @@ router.get("/", (req, res) => {
                userId: collection.user_id,
             };
          });
-
+         // console.log(camelCaseCollections);
          const unfinishedCollections = uniqBy(
             camelCaseCollections,
             "collectionId"

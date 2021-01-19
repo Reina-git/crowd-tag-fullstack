@@ -9,16 +9,21 @@ import { checkIsOver, MAX_CARD_CHARS } from "../../utils/helpers";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import without from "lodash/without";
+import axios from "axios";
+// import actions from "../../store/actions";
 
 class Image extends React.Component {
    constructor(props) {
       super(props);
-      const allTags = this.props.selectedPhoto.photo.tags;
+      // const allTags = this.props.selectedPhoto.photo.tags;
+      // console.log("allTags", allTags);
       this.state = {
          tagText: "",
-         displayedTags: allTags,
+         displayedTags: [],
+         // displayedTags: allTags,
          isLoggedIn: "",
          photo: this.props.selectedPhoto.photo,
+         authToken: localStorage.authToken,
       };
       this.deleteTag = this.deleteTag.bind(this);
       this.setTagText = this.setTagText.bind(this);
@@ -34,7 +39,7 @@ class Image extends React.Component {
          displayedTags: filteredTags,
       });
       this.props.history.push("/image");
-      console.log("tag", filteredTags);
+      // console.log("tag", filteredTags);
       // console.log("filtered tags", filteredTags);
    }
 
@@ -52,7 +57,7 @@ class Image extends React.Component {
             displayedTags: updatedDisplayedTags,
          });
          this.setState({ tagText: "" });
-         console.log(newTagObject);
+         // console.log(newTagObject);
       }
    }
 
@@ -65,12 +70,35 @@ class Image extends React.Component {
       } else return false;
    }
 
+   componentDidMount() {
+      this.getTags();
+   }
+
+   getTags() {
+      axios
+         .get(
+            `/api/v1/tags?photoIdFromCollection=${this.props.selectedPhoto.photo.id}`
+         )
+         .then((res) => {
+            // handle success
+            console.log("test in getTags", res.data);
+
+            this.setState({
+               displayedTags: res.data,
+            });
+         })
+         .catch((error) => {
+            // handle error
+            console.log(error);
+         });
+   }
+
    setTagText(e) {
       this.setState({ tagText: e.target.value });
    }
 
    backToCollection() {
-      console.log("back to collections", this.props.selectedPhoto.prevRoute);
+      // console.log("back to collections", this.props.selectedPhoto.prevRoute);
       if (this.props.selectedPhoto.prevRoute === "/collection") {
          this.props.history.push("/collection");
       }
@@ -81,10 +109,21 @@ class Image extends React.Component {
       }
    }
 
+   // isLoggedIn() {
+   //    const authToken = localStorage.authToken;
+   //    if (authToken === undefined) {
+   //       console.log("no user signed in");
+   //    } else {
+   //       console.log("a user is signed in");
+   //    }
+   // }
+
    render() {
       // console.log("props on image page", this.props.photo);
       const photo = this.props.selectedPhoto.photo;
-      console.log("photo", photo);
+      // console.log("photo", photo);
+      // console.log("authToken", this.state.authToken);
+      // console.log("photo props", this.props.selectedPhoto.photo.id);
 
       return (
          <AppTemplate>
@@ -139,7 +178,8 @@ class Image extends React.Component {
                   </div>
                </div>
             </div>
-            {/* <!-- Input--> */}
+            {/* <!-- Login--> */}
+
             <div className="row">
                <div className="col-12 mt-5">
                   <p className="text-pimary">
@@ -150,6 +190,9 @@ class Image extends React.Component {
                   </Link>
                </div>
             </div>
+
+            {/* need to be logged in for this section */}
+
             <div className="row">
                <div className="col-12 mt-5">
                   <p className="text-primary">Type a tag then press enter.</p>
@@ -193,6 +236,8 @@ class Image extends React.Component {
                   })}
                </div>
             </div>
+
+            {/* end of tag sections */}
          </AppTemplate>
       );
    }

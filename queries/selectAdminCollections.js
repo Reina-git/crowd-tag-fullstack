@@ -22,5 +22,7 @@ const selectAdminCollections = `
         tags ON tags.id = tag_id
 
     WHERE users.id = ?;
+    AND  
+        xref_tag_photo.user_id = ?
     `;
 module.exports = selectAdminCollections;

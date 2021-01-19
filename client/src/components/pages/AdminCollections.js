@@ -8,7 +8,6 @@ import { connect } from "react-redux";
 import actions from "../../store/actions";
 import without from "lodash/without";
 
-// console.log("authToken", authToken);
 class AdminCollections extends React.Component {
    constructor(props) {
       super(props);
