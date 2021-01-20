@@ -2,7 +2,7 @@ import React from "react";
 import AppTemplate from "../ui/AppTemplate";
 import BackArrow from "../../icons/icon-arrow-thick-left-circle.svg";
 import { Link } from "react-router-dom";
-import LeftChevron from "../../icons/icon-cheveron-down.svg";
+// import LeftChevron from "../../icons/icon-cheveron-down.svg";
 import Tag from "../ui/Tag";
 import classnames from "classnames";
 import { checkIsOver, MAX_CARD_CHARS } from "../../utils/helpers";
@@ -11,6 +11,7 @@ import { withRouter } from "react-router-dom";
 import without from "lodash/without";
 import axios from "axios";
 import { v4 as getUuid } from "uuid";
+import jwtDecode from "jwt-decode";
 // import actions from "../../store/actions";
 
 class Image extends React.Component {
@@ -22,7 +23,7 @@ class Image extends React.Component {
          tagText: "",
          displayedTags: [],
          // displayedTags: allTags,
-         isLoggedIn: "",
+         isLoggedIn: false,
          photo: this.props.selectedPhoto.photo,
          authToken: localStorage.authToken,
       };
@@ -54,12 +55,7 @@ class Image extends React.Component {
                photo_id: this.props.selectedPhoto.photo.id,
                user_id: this.props.currentUser.id,
             };
-            // const newXrefObject = {
-            //    Xref_id: getUuid(),
-            //    tag_id: newTagObject.id,
-            //    photo_id: this.props.selectedPhoto.photo.id,
-            //    user_id: this.props.currentUser.id,
-            // };
+
             axios
                .post("/api/v1/tags", newTagObject)
                .then((res) => {
@@ -94,6 +90,7 @@ class Image extends React.Component {
 
    componentDidMount() {
       this.getTags();
+      this.showLogInTagInput();
    }
 
    getTags() {
@@ -104,7 +101,6 @@ class Image extends React.Component {
          .then((res) => {
             // handle success
             // console.log("test in getTags", res.data);
-
             this.setState({
                displayedTags: res.data,
             });
@@ -131,14 +127,30 @@ class Image extends React.Component {
       }
    }
 
-   // isLoggedIn() {
-   //    const authToken = localStorage.authToken;
-   //    if (authToken === undefined) {
-   //       console.log("no user signed in");
-   //    } else {
-   //       console.log("a user is signed in");
-   //    }
-   // }
+   showLogInTagInput() {
+      const authToken = localStorage.authToken;
+      console.log(authToken);
+      if (authToken) {
+         const currentTimeInSec = Date.now() / 1000;
+         const user = jwtDecode(authToken);
+         if (currentTimeInSec > user.exp) {
+            console.log("expiredToken");
+            this.setState({
+               isLoggedIn: false,
+            });
+         } else {
+            this.setState({
+               isLoggedIn: true,
+            });
+            console.log("valid token", this.state.isLoggedIn);
+         }
+      } else {
+         console.log("no token on image page", this.state.isLoggedIn);
+         this.setState({
+            isLoggedIn: false,
+         });
+      }
+   }
 
    render() {
       // console.log("props on image page", this.props.photo);
@@ -172,12 +184,13 @@ class Image extends React.Component {
             <div className="row">
                <div className="d-flex justify-content-center mt-5">
                   <div className="col-2 col-md-1 align-self-center">
-                     <img
+                     {/* TODO add functionality to toggle to previous and next photos */}
+                     {/* <img
                         src={LeftChevron}
                         width="100%"
                         id="rotate-left"
                         alt="left chevron"
-                     />
+                     /> */}
                   </div>
                   <div className="col-8 col-md-10">
                      <div>
@@ -191,74 +204,80 @@ class Image extends React.Component {
                   </div>
 
                   <div className="col-2 col-md-1 align-self-center">
-                     <img
+                     {/* <img
                         src={LeftChevron}
                         width="100%"
                         id="rotate-right"
                         alt="right chevron"
-                     />
+                     /> */}
                   </div>
                </div>
             </div>
             {/* <!-- Login--> */}
-
-            <div className="row">
-               <div className="col-12 mt-5">
-                  <p className="text-pimary">
-                     Please log in to begin tagging photos.
-                  </p>
-                  <Link to="/log-in" className="btn btn-primary">
-                     Log in
-                  </Link>
-               </div>
-            </div>
-
+            {!this.state.isLoggedIn && (
+               <>
+                  <div className="row">
+                     <div className="col-12 mt-5">
+                        <p className="text-pimary">
+                           Please log in to begin tagging photos.
+                        </p>
+                        <Link to="/log-in" className="btn btn-primary">
+                           Log in
+                        </Link>
+                     </div>
+                  </div>
+               </>
+            )}
             {/* need to be logged in for this section */}
-
-            <div className="row">
-               <div className="col-12 mt-5">
-                  <p className="text-primary">Type a tag then press enter.</p>
-                  <input
-                     className="form-control form-control-sm mt-3"
-                     // ref="tagInput"
-                     type="text"
-                     placeholder="Add a tag"
-                     id="tagText"
-                     value={this.state.tagText}
-                     onKeyDown={this.addTag}
-                     onChange={(e) => this.setTagText(e)}
-                  />
-               </div>
-            </div>
-            <p className="float-right mt-2 mb-0 text-muted">
-               <span
-                  className={classnames({
-                     "text-danger": checkIsOver(
-                        this.state.tagText,
-                        MAX_CARD_CHARS
-                     ),
-                  })}
-               >
-                  {this.state.tagText.length}/{MAX_CARD_CHARS}
-               </span>
-            </p>
-
-            <div className="row">
-               <div className="col-12">
-                  <div className="clearfix"></div>
-
-                  {this.state.displayedTags.map((tag) => {
-                     return (
-                        <Tag
-                           tag={tag}
-                           key={tag.id}
-                           deleteTag={this.deleteTag}
+            {this.state.isLoggedIn && (
+               <>
+                  <div className="row">
+                     <div className="col-12 mt-5">
+                        <p className="text-primary">
+                           Type a tag then press enter.
+                        </p>
+                        <input
+                           className="form-control form-control-sm mt-3"
+                           // ref="tagInput"
+                           type="text"
+                           placeholder="Add a tag"
+                           id="tagText"
+                           value={this.state.tagText}
+                           onKeyDown={this.addTag}
+                           onChange={(e) => this.setTagText(e)}
                         />
-                     );
-                  })}
-               </div>
-            </div>
+                     </div>
+                  </div>
+                  <p className="float-right mt-2 mb-0 text-muted">
+                     <span
+                        className={classnames({
+                           "text-danger": checkIsOver(
+                              this.state.tagText,
+                              MAX_CARD_CHARS
+                           ),
+                        })}
+                     >
+                        {this.state.tagText.length}/{MAX_CARD_CHARS}
+                     </span>
+                  </p>
 
+                  <div className="row">
+                     <div className="col-12">
+                        <div className="clearfix"></div>
+
+                        {this.state.displayedTags.map((tag) => {
+                           return (
+                              <Tag
+                                 tag={tag}
+                                 key={tag.id}
+                                 deleteTag={this.deleteTag}
+                              />
+                           );
+                        })}
+                     </div>
+                  </div>
+               </>
+            )}
             {/* end of tag sections */}
          </AppTemplate>
       );
