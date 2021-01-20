@@ -183,16 +183,18 @@ class Image extends React.Component {
 
             <div className="row">
                <div className="d-flex justify-content-center mt-5">
-                  <div className="col-2 col-md-1 align-self-center">
-                     {/* TODO add functionality to toggle to previous and next photos */}
-                     {/* <img
+                  {/* TODO add functionality to toggle to previous and next photos */}
+
+                  {/* <div className="col-2 col-md-1 align-self-center">
+                  
+                     <img
                         src={LeftChevron}
                         width="100%"
                         id="rotate-left"
                         alt="left chevron"
-                     /> */}
-                  </div>
-                  <div className="col-8 col-md-10">
+                     />
+                  </div> */}
+                  <div className="col-12 col-md-12">
                      <div>
                         <img
                            src={photo.url}
@@ -203,17 +205,19 @@ class Image extends React.Component {
                      </div>
                   </div>
 
-                  <div className="col-2 col-md-1 align-self-center">
-                     {/* <img
+                  {/* <div className="col-2 col-md-1 align-self-center">
+                     <img
                         src={LeftChevron}
                         width="100%"
                         id="rotate-right"
                         alt="right chevron"
-                     /> */}
-                  </div>
+                     />
+                  </div> */}
                </div>
             </div>
             {/* <!-- Login--> */}
+
+            {/* TODO add route for login so once logged in it will redirect back to this page */}
             {!this.state.isLoggedIn && (
                <>
                   <div className="row">
