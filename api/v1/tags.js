@@ -5,12 +5,14 @@ const db = require("../../db");
 const selectAllTags = require("../../queries/selectAllTags");
 const uniqBy = require("lodash/uniqBy");
 const validateJwt = require("../../utils/validatejwt");
+const insertTag = require("../../queries/insertTag");
+const insertXref = require("../../queries/insertXref");
 
 router.get("/", validateJwt, (req, res) => {
    const userId = req.user.id;
-   console.log("user id", userId);
+   //    console.log("user id", userId);
    const photoId = req.query.photoIdFromCollection;
-   console.log("photo id", req.query.photoIdFromCollection);
+   //    console.log("photo id", req.query.photoIdFromCollection);
    //    console.log("selectAllTags", selectAllTags);
    db.query(selectAllTags, [userId, photoId])
       .then((tags) => {
@@ -25,7 +27,7 @@ router.get("/", validateJwt, (req, res) => {
          });
 
          res.json(allTagsForPhoto);
-         console.log("allTagsForPhoto", allTagsForPhoto);
+         //  console.log("allTagsForPhoto", allTagsForPhoto);
       })
       .catch((err) => {
          console.log(err);
@@ -33,43 +35,45 @@ router.get("/", validateJwt, (req, res) => {
       });
 });
 
-//  const camelCaseCollections = collections.map((collection) => {
-//     return {
-//        photoId: collection.photo_id,
-//        tagName: collection.tag_name,
-//        userCreatedTag: collection.user_created_tag,
-//        tagId: collection.tag_id,
-//        xrefId: collection.xref_id,
-//     };
-//  });
-//  console.log("camelCaseCollections", photosWithTags);
-//  const photosWithTags = uniqBy(camelCaseCollections, "photoId").map(
-//     (photo) => {
-//        return {
-//           id: photo.photoId,
-//           tags: camelCaseCollections.map((camelCaseCollection) => {
-//              return {
-//                 id: camelCaseCollection.tagId,
-//                 userID: camelCaseCollection.userCreatedTag,
-//                 name: camelCaseCollection.tagName,
-//                 xrefId: camelCaseCollection.xrefId,
-//              };
-//           }),
-//        };
-//     }
-//  );
-//  const uniqCollectionPhotos = uniqBy(collectionPhotos, "id");
-//  return {
-//     ...collection,
-//     photos: uniqCollectionPhotos,
-//  };
-//  console.log("photosWithTags", photosWithTags);
-//  res.json(photosWithTags);
-//   })
-//   .catch((err) => {
-//      console.log(err);
-//      res.status(400).json(err);
-//   });
-// });
+// @route   Post api/v1/tags
+// @desc    Post all tags for a user
+// @access  Private
+
+// router.put("/", validateJwt, (req, res) => {
+//     const user = req.user;
+//     db.query(insertTag, insertXref,)
+
+router.post("/", async (req, res) => {
+   console.log("req.body from tag post", req.body);
+   const tagForTags = {
+      id: req.body.id,
+      name: req.body.name,
+   };
+   const tagForXref = {
+      id: req.body.xref_id,
+      tag_id: req.body.id,
+      photo_id: req.body.photo_id,
+      user_id: req.body.user_id,
+   };
+
+   await db
+      .query(insertTag, tagForTags)
+      .then((tag) => {
+         console.log("insertTag", tag);
+      })
+      .catch((err) => {
+         console.log(err);
+         res.status(400).json(err);
+      });
+   await db
+      .query(insertXref, tagForXref)
+      .then((tag) => {
+         console.log("insertXref", tag);
+      })
+      .catch((err) => {
+         console.log(err);
+         res.status(400).json(err);
+      });
+});
 
 module.exports = router;

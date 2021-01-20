@@ -10,13 +10,14 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import without from "lodash/without";
 import axios from "axios";
+import { v4 as getUuid } from "uuid";
 // import actions from "../../store/actions";
 
 class Image extends React.Component {
    constructor(props) {
       super(props);
       // const allTags = this.props.selectedPhoto.photo.tags;
-      // console.log("allTags", allTags);
+      // console.log("looking for current user ID", this.props.currentUser.id);
       this.state = {
          tagText: "",
          displayedTags: [],
@@ -44,20 +45,41 @@ class Image extends React.Component {
    }
 
    addTag(e) {
-      if (e.keyCode === 13) {
-         let newTagObject = {
-            id: Date.now(),
-            name: "",
-            userId: "",
-         };
-         newTagObject.name = document.getElementById("tagText").value;
-         const copyOfDisplayedTags = [...this.state.displayedTags];
-         const updatedDisplayedTags = copyOfDisplayedTags.concat(newTagObject);
-         this.setState({
-            displayedTags: updatedDisplayedTags,
-         });
-         this.setState({ tagText: "" });
-         // console.log(newTagObject);
+      if (!this.checkHasInvalidCharCount()) {
+         if (e.keyCode === 13) {
+            const newTagObject = {
+               id: getUuid(),
+               name: document.getElementById("tagText").value,
+               xref_id: getUuid(),
+               photo_id: this.props.selectedPhoto.photo.id,
+               user_id: this.props.currentUser.id,
+            };
+            // const newXrefObject = {
+            //    Xref_id: getUuid(),
+            //    tag_id: newTagObject.id,
+            //    photo_id: this.props.selectedPhoto.photo.id,
+            //    user_id: this.props.currentUser.id,
+            // };
+            axios
+               .post("/api/v1/tags", newTagObject)
+               .then((res) => {
+                  console.log("posting in tags", res);
+               })
+               .catch((err) => {
+                  console.log(err);
+               });
+
+            const copyOfDisplayedTags = [...this.state.displayedTags];
+            const updatedDisplayedTags = copyOfDisplayedTags.concat(
+               newTagObject
+            );
+            this.setState({
+               displayedTags: updatedDisplayedTags,
+            });
+            this.setState({ tagText: "" });
+            console.log("newTagObject", newTagObject);
+            // console.log("xref object", newXrefObject);
+         }
       }
    }
 
@@ -81,7 +103,7 @@ class Image extends React.Component {
          )
          .then((res) => {
             // handle success
-            console.log("test in getTags", res.data);
+            // console.log("test in getTags", res.data);
 
             this.setState({
                displayedTags: res.data,
@@ -198,7 +220,7 @@ class Image extends React.Component {
                   <p className="text-primary">Type a tag then press enter.</p>
                   <input
                      className="form-control form-control-sm mt-3"
-                     ref="tagInput"
+                     // ref="tagInput"
                      type="text"
                      placeholder="Add a tag"
                      id="tagText"
@@ -244,8 +266,9 @@ class Image extends React.Component {
 }
 function mapStateToProps(state) {
    return {
+      currentUser: state.currentUser,
       selectedPhoto: state.selectedPhoto,
-      displayedTag: state.displayedTag,
+      // displayedTag: state.displayedTag,
    };
 }
 
