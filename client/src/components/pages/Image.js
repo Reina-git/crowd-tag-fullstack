@@ -36,11 +36,24 @@ class Image extends React.Component {
       const deletedTag = tag;
       const tags = this.state.displayedTags;
       const filteredTags = without(tags, deletedTag);
-      //
-      this.setState({
-         displayedTags: filteredTags,
-      });
-      this.props.history.push("/image");
+      console.log("looking for tag id", deletedTag.xrefId);
+      axios
+         .delete(`/api/v1/tags/${deletedTag.xrefId}`)
+         .then((res) => {
+            console.log(res.data);
+            this.setState({
+               displayedTags: filteredTags,
+            });
+            this.props.history.push("/image");
+         })
+         .catch((err) => {
+            console.log(err.response.data);
+         });
+
+      // this.setState({
+      //    displayedTags: filteredTags,
+      // });
+      // this.props.history.push("/image");
       // console.log("tag", filteredTags);
       // console.log("filtered tags", filteredTags);
    }
@@ -129,12 +142,12 @@ class Image extends React.Component {
 
    showLogInTagInput() {
       const authToken = localStorage.authToken;
-      console.log(authToken);
+      // console.log(authToken);
       if (authToken) {
          const currentTimeInSec = Date.now() / 1000;
          const user = jwtDecode(authToken);
          if (currentTimeInSec > user.exp) {
-            console.log("expiredToken");
+            // console.log("expiredToken");
             this.setState({
                isLoggedIn: false,
             });
@@ -142,10 +155,10 @@ class Image extends React.Component {
             this.setState({
                isLoggedIn: true,
             });
-            console.log("valid token", this.state.isLoggedIn);
+            // console.log("valid token", this.state.isLoggedIn);
          }
       } else {
-         console.log("no token on image page", this.state.isLoggedIn);
+         // console.log("no token on image page", this.state.isLoggedIn);
          this.setState({
             isLoggedIn: false,
          });
@@ -153,12 +166,7 @@ class Image extends React.Component {
    }
 
    render() {
-      // console.log("props on image page", this.props.photo);
       const photo = this.props.selectedPhoto.photo;
-      // console.log("photo", photo);
-      // console.log("authToken", this.state.authToken);
-      // console.log("photo props", this.props.selectedPhoto.photo.id);
-
       return (
          <AppTemplate>
             <div className="row">

@@ -7,6 +7,8 @@ const uniqBy = require("lodash/uniqBy");
 const validateJwt = require("../../utils/validatejwt");
 const insertTag = require("../../queries/insertTag");
 const insertXref = require("../../queries/insertXref");
+const deleteTagById = require("../../queries/deleteTagbyId");
+const deleteXrefById = require("../../queries/deleteXrefbyId");
 
 router.get("/", validateJwt, (req, res) => {
    const userId = req.user.id;
@@ -74,6 +76,34 @@ router.post("/", async (req, res) => {
          console.log(err);
          res.status(400).json(err);
       });
+});
+
+// @route   Delete api/v1/tags/:id
+// @desc    Delete tag selected by user
+// @access  Private
+
+router.delete("/:id", validateJwt, (req, res) => {
+   console.log("looking for tag id", req.params);
+   const id = req.params.id;
+   db.query(deleteXrefById, id)
+      .then(() => {
+         return res.status(200).json({ success: "tag deleted" });
+      })
+      .catch((err) => {
+         console.log(err);
+         const dbError = `${err.code} ${err.sqlMessage}`;
+         return res.status(500).json({ dbError });
+      });
+   // await db
+   //    .query(deleteXrefById, id)
+   //    .then(() => {
+   //       return res.status(200).json({ success: "xref deleted" });
+   //    })
+   //    .catch((err) => {
+   //       console.log(err);
+   //       const dbError = `${err.code} ${err.sqlMessage}`;
+   //       return res.status(500).json({ dbError });
+   //    });
 });
 
 module.exports = router;
