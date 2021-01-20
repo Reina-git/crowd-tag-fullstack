@@ -62,9 +62,10 @@ class SignUp extends React.Component {
             });
 
             axios.defaults.headers.common["x-auth-token"] = authToken;
-            if (res.data.institutionName === "") {
+
+            if (user.institutionName === "") {
                this.props.history.push("/");
-            } else if (res.data.institutionName !== "") {
+            } else if (user.institutionName !== "") {
                this.props.history.push("/admin-collections");
             }
          })
