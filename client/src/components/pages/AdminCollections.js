@@ -43,6 +43,10 @@ class AdminCollections extends React.Component {
                type: actions.STORE_ALL_COLLECTIONS,
                payload: res.data,
             });
+            // this.props.dispatch({
+            //    type: actions.STORE_SELECTED_COLLECTION,
+            //    payload: {},
+            // });
          })
          .catch((error) => {
             // handle error
