@@ -128,6 +128,19 @@ class AdminAddPhotoCollection extends React.Component {
       // }
    }
 
+   saveCollection() {
+      const newCollection = {
+         id: this.props.collection.id,
+         name: this.state.collectionTitle,
+         userId: this.props.collection.userId,
+         createdAt: this.props.collection.createdAt,
+         institutionName: this.props.collection.institutionName,
+         photos: this.state.displayedPhotos,
+      };
+      // console.log(this.props.collection.id);
+      console.log("updated collection", newCollection);
+   }
+
    render() {
       return (
          <AppTemplate>
@@ -233,7 +246,12 @@ class AdminAddPhotoCollection extends React.Component {
                <Link to="" className="btn btn-outline-primary">
                   Cancel
                </Link>
-               <Link to="" className="btn btn-primary ml-4">
+               <button
+                  className="btn btn-primary ml-4"
+                  onClick={() => {
+                     this.saveCollection();
+                  }}
+               >
                   <img
                      src={Save}
                      width="20px"
@@ -241,7 +259,7 @@ class AdminAddPhotoCollection extends React.Component {
                      alt=""
                   />
                   Save
-               </Link>
+               </button>
             </div>
             <div className="mt-4 mb-3">
                {this.state.isDisplayingDelete && (
