@@ -9,19 +9,23 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import without from "lodash/without";
 import actions from "../../store/actions";
+import { v4 as getUuid } from "uuid";
 
 class AdminAddPhotoCollection extends React.Component {
    constructor(props) {
       super(props);
       // console.log("props", props.collection.photos);
-      const allPhotos = this.props.collection.photos;
+      // const allPhotos = this.props.collection.photos;
       this.state = {
          isDisplayingAddPhoto: false,
          isDisplayingDelete: false,
          displayedPhotos: [],
-         // displayedPhotos: allPhotos,
+         collectionTitle: this.props.collection.name,
+         photoUrl: "",
+         // collectionToSave: {},
       };
       this.deletePhoto = this.deletePhoto.bind(this);
+      this.setPhotoUrlText = this.setPhotoUrlText.bind(this);
    }
 
    componentDidMount() {
@@ -49,6 +53,54 @@ class AdminAddPhotoCollection extends React.Component {
          isDisplayingAddPhoto: !this.state.isDisplayingAddPhoto,
       });
    }
+
+   setPhotoUrlState() {
+      const photoUrl = document.getElementById("addPhotoInput").value;
+
+      this.setState({
+         photoUrl: photoUrl,
+      });
+   }
+
+   checkHasInvalidCharCount() {
+      if (
+         this.state.photoUrl.length > 2000 ||
+         this.state.photoUrl.length === 0
+      ) {
+         return true;
+      } else return false;
+   }
+
+   setPhotoUrlText(e) {
+      this.setState({ photoUrl: e.target.value });
+      console.log("text input", e.target.value);
+   }
+
+   addPhoto() {
+      if (!this.checkHasInvalidCharCount()) {
+         this.setPhotoUrlState();
+         const newPhotoObject = {
+            id: getUuid(),
+            collectionID: this.props.collection.id,
+            uploadedAt: Date.now(),
+            fileName: "replaceMe",
+            url: document.getElementById("addPhotoInput").value,
+            tags: [],
+         };
+
+         const copyOfDisplayedPhotos = [...this.state.displayedPhotos];
+         const updatedDisplayedPhotos = copyOfDisplayedPhotos.concat(
+            newPhotoObject
+         );
+         this.setState({
+            displayedPhotos: updatedDisplayedPhotos,
+         });
+         this.setState({ photoUrl: "" });
+
+         console.log("newPhotoObject", newPhotoObject);
+      }
+   }
+
    deletePhoto(photo) {
       const deletedPhoto = photo;
       const photos = this.state.displayedPhotos;
@@ -121,21 +173,32 @@ class AdminAddPhotoCollection extends React.Component {
                   </button>
                </div>
             </div>
-            <div className="row">
-               <div className="col-12">
-                  {this.state.isDisplayingAddPhoto && (
-                     <>
-                        <div id="photo-url">
-                           <input
-                              className="form-control form-control-sm mt-3"
-                              type="text"
-                              placeholder="Add photo url"
-                           />
-                        </div>
-                     </>
-                  )}
-               </div>
-            </div>
+            {this.state.isDisplayingAddPhoto && (
+               <>
+                  <div className="row my-4">
+                     <div className="col-8">
+                        <input
+                           className="form-control form-control-sm"
+                           type="text"
+                           placeholder="Add photo url"
+                           id="addPhotoInput"
+                           value={this.state.photoUrl}
+                           onChange={this.state.photoUrl}
+                           onChange={(e) => this.setPhotoUrlText(e)}
+                        />
+                     </div>
+                     <div className="col-4">
+                        <button
+                           className="btn btn-primary btn-block btn-sm"
+                           onClick={() => this.addPhoto()}
+                        >
+                           Add Photo
+                        </button>
+                     </div>
+                  </div>
+               </>
+            )}
+
             {/* <!-- Collection Name --> */}
             <hr className="mt-2 mb-5" />
 
