@@ -12,7 +12,40 @@ class Header extends React.Component {
       this.state = {
          isLoggedIn: {},
          showLogin: true,
+         isLibraryUser: false,
       };
+   }
+
+   componentDidMount() {
+      this.checkUserType();
+      this.setShowLogin();
+   }
+
+   checkUserType() {
+      const authToken = localStorage.authToken;
+      if (authToken) {
+         if (this.state.showLogin === true) {
+            const user = jwtDecode(authToken);
+            // console.log("user in checkUserType", user.institutionName);
+            if (user.institutionName.length > 0) {
+               this.setState({
+                  isLibraryUser: true,
+               });
+            } else {
+               this.setState({
+                  isLibraryUser: false,
+               });
+            }
+         } else if (this.state.showLogin === false) {
+            this.setState({
+               isLibraryUser: false,
+            });
+         }
+      } else {
+         this.setState({
+            isLibraryUser: false,
+         });
+      }
    }
 
    logOutCurrentUser() {
@@ -24,14 +57,18 @@ class Header extends React.Component {
          type: actions.STORE_ALL_COLLECTIONS,
          payload: [],
       });
+      this.setState({
+         isLibraryUser: false,
+      });
    }
 
-   showLogInTagInput() {
+   setShowLogin() {
       const authToken = localStorage.authToken;
       // console.log(authToken);
       if (authToken) {
          const currentTimeInSec = Date.now() / 1000;
          const user = jwtDecode(authToken);
+         console.log("user in header", user);
          if (currentTimeInSec > user.exp) {
             // console.log("expiredToken");
             this.setState({
@@ -70,9 +107,9 @@ class Header extends React.Component {
                   </h1>
                </Link>
                <div className="float-right mt-2">
-                  {this.state.showLogin && (
+                  {!this.state.showLogin && (
                      <>
-                        <Link to="/log-in" className="collection-link pr-3">
+                        <Link to="/log-in" className="collection-link">
                            Log in
                         </Link>
                      </>
@@ -80,7 +117,19 @@ class Header extends React.Component {
                   {/* <Link to="/library-log-in" className="collection-link pr-3">
               Library log in
             </Link> */}
-                  {!this.state.showLogin && (
+
+                  {this.state.isLibraryUser && (
+                     <>
+                        <Link
+                           to="/admin-collections"
+                           className="collection-link pr-3"
+                        >
+                           My Collections
+                        </Link>
+                     </>
+                  )}
+
+                  {this.state.showLogin && (
                      <>
                         <Link
                            to="/log-in"
