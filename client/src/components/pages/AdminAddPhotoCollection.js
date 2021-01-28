@@ -76,6 +76,14 @@ class AdminAddPhotoCollection extends React.Component {
       console.log("text input", e.target.value);
    }
 
+   getPhotoName() {
+      const url = document.getElementById("addPhotoInput").value;
+      const splitUrl = url.split("/");
+      const reverseSplitUrl = splitUrl.reverse();
+      const photoName = reverseSplitUrl[0];
+      return photoName;
+   }
+
    addPhoto() {
       if (!this.checkHasInvalidCharCount()) {
          this.setPhotoUrlState();
@@ -83,7 +91,7 @@ class AdminAddPhotoCollection extends React.Component {
             id: getUuid(),
             collectionID: this.props.collection.id,
             uploadedAt: Date.now(),
-            fileName: "replaceMe",
+            fileName: this.getPhotoName(),
             url: document.getElementById("addPhotoInput").value,
             dbAction: "add",
             tags: [],
@@ -197,7 +205,7 @@ class AdminAddPhotoCollection extends React.Component {
                            placeholder="Add photo url"
                            id="addPhotoInput"
                            value={this.state.photoUrl}
-                           onChange={this.state.photoUrl}
+                           // onChange={this.state.photoUrl}
                            onChange={(e) => this.setPhotoUrlText(e)}
                         />
                      </div>
