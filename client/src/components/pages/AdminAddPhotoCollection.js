@@ -85,6 +85,7 @@ class AdminAddPhotoCollection extends React.Component {
             uploadedAt: Date.now(),
             fileName: "replaceMe",
             url: document.getElementById("addPhotoInput").value,
+            dbAction: "add",
             tags: [],
          };
 

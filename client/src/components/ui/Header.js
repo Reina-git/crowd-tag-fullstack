@@ -3,6 +3,7 @@ import Logo from "../../images/noun_shutter_1063959.svg";
 import { Link } from "react-router-dom";
 import actions from "../../store/actions";
 import { connect } from "react-redux";
+import jwtDecode from "jwt-decode";
 
 class Header extends React.Component {
    constructor(props) {
@@ -10,6 +11,7 @@ class Header extends React.Component {
       // console.log(this.props.user);
       this.state = {
          isLoggedIn: {},
+         showLogin: true,
       };
    }
 
@@ -22,6 +24,31 @@ class Header extends React.Component {
          type: actions.STORE_ALL_COLLECTIONS,
          payload: [],
       });
+   }
+
+   showLogInTagInput() {
+      const authToken = localStorage.authToken;
+      // console.log(authToken);
+      if (authToken) {
+         const currentTimeInSec = Date.now() / 1000;
+         const user = jwtDecode(authToken);
+         if (currentTimeInSec > user.exp) {
+            // console.log("expiredToken");
+            this.setState({
+               showLogin: false,
+            });
+         } else {
+            this.setState({
+               showLogin: true,
+            });
+            // console.log("valid token", this.state.showLogin);
+         }
+      } else {
+         // console.log("no token on image page", this.state.showLogin);
+         this.setState({
+            showLogin: false,
+         });
+      }
    }
 
    render() {
@@ -43,21 +70,29 @@ class Header extends React.Component {
                   </h1>
                </Link>
                <div className="float-right mt-2">
-                  <Link to="/log-in" className="collection-link pr-3">
-                     Log in
-                  </Link>
+                  {this.state.showLogin && (
+                     <>
+                        <Link to="/log-in" className="collection-link pr-3">
+                           Log in
+                        </Link>
+                     </>
+                  )}
                   {/* <Link to="/library-log-in" className="collection-link pr-3">
               Library log in
             </Link> */}
-                  <Link
-                     to="/log-in"
-                     className="collection-link"
-                     onClick={() => {
-                        this.logOutCurrentUser();
-                     }}
-                  >
-                     Log out
-                  </Link>
+                  {!this.state.showLogin && (
+                     <>
+                        <Link
+                           to="/log-in"
+                           className="collection-link"
+                           onClick={() => {
+                              this.logOutCurrentUser();
+                           }}
+                        >
+                           Log out
+                        </Link>
+                     </>
+                  )}
                </div>
             </div>
          </div>
