@@ -18,9 +18,6 @@ class Header extends React.Component {
    }
 
    componentDidMount() {
-      //
-      // this.checkUserType();
-      // this.setShowLogin();
       this.setHeader();
    }
 
@@ -61,68 +58,11 @@ class Header extends React.Component {
          });
       }
       if (user.institutionName.length > 0) {
-         console.log("is library user");
+         // console.log("is library user");
          this.setState({
             isLibraryUser: true,
          });
       } else {
-         this.setState({
-            isLibraryUser: false,
-         });
-      }
-   }
-
-   // setShowLogin() {
-   //    const authToken = localStorage.authToken;
-   //    // console.log(authToken);
-   //    if (authToken) {
-   //       const currentTimeInSec = Date.now() / 1000;
-   //       const user = jwtDecode(authToken);
-   //       // console.log("user in header", user);
-   //       if (currentTimeInSec > user.exp) {
-   //          // console.log("expiredToken");
-   //          this.setState({
-   //             isShowingLogout: false,
-   //          });
-   //       } else {
-   //          this.setState({
-   //             isShowingLogout: true,
-   //          });
-   //          // console.log("valid token", this.state.isShowingLogout);
-   //       }
-   //    } else {
-   //       // console.log("no token on image page", this.state.isShowingLogout);
-   //       this.setState({
-   //          showLogin: false,
-   //       });
-   //    }
-   // }
-
-   checkUserType() {
-      const authToken = localStorage.authToken;
-      if (authToken) {
-         // console.log("state", await this.state.isShowingLogout);
-         if (this.state.isShowingLogout === true) {
-            console.log("show logout === ture");
-            const user = jwtDecode(authToken);
-            console.log("user in checkUserType", user.institutionName);
-            if (user.institutionName.length > 0) {
-               this.setState({
-                  isLibraryUser: true,
-               });
-            } else {
-               this.setState({
-                  isLibraryUser: false,
-               });
-            }
-         } else if (this.state.isShowingLogout === false) {
-            console.log("The user logged in is not a library user");
-            this.setState({
-               isLibraryUser: false,
-            });
-         }
-      } else {
-         console.log("The is no user logged in");
          this.setState({
             isLibraryUser: false,
          });
