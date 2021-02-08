@@ -111,15 +111,24 @@ class AdminAddPhotoCollection extends React.Component {
    }
 
    deletePhoto(photo) {
-      const deletedPhoto = photo;
+      const deletedPhoto = {
+         ...photo,
+         dbAction: "remove",
+      };
+      console.log(deletedPhoto);
+      // replace old photo with deleted photo
+      // find index of where the og photo is
+      // replace the object at that index
+      // now we have the new array and set the state with the new array
       const photos = this.state.displayedPhotos;
       const filteredPhotos = without(photos, deletedPhoto);
-      console.log("filteredPhotos", filteredPhotos);
+      // console.log("filteredPhotos", filteredPhotos);
       //
       this.setState({
          displayedPhotos: filteredPhotos,
       });
    }
+
    deleteCollection() {
       console.log(this.props.allCollections);
       const deletedCollection = this.props.collection;
