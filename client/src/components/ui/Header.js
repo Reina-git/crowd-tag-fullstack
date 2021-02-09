@@ -38,35 +38,43 @@ class Header extends React.Component {
 
    setHeader() {
       const authToken = localStorage.authToken;
-      const user = jwtDecode(authToken);
+      // const user = jwtDecode(authToken);
       if (authToken) {
          const currentTimeInSec = Date.now() / 1000;
-         // const user = jwtDecode(authToken);
+         const user = jwtDecode(authToken);
          if (currentTimeInSec > user.exp) {
             this.setState({
                isShowingLogout: false,
                isLibraryUser: false,
             });
+         } else if (user.institutionName.length > 0) {
+            this.setState({
+               isLibraryUser: true,
+               isShowingLogout: true,
+            });
          } else {
             this.setState({
                isShowingLogout: true,
+               isLibraryUser: false,
             });
          }
       } else {
          this.setState({
-            showLogin: false,
-         });
-      }
-      if (user.institutionName.length > 0) {
-         // console.log("is library user");
-         this.setState({
-            isLibraryUser: true,
-         });
-      } else {
-         this.setState({
+            isShowingLogout: false,
             isLibraryUser: false,
          });
       }
+      // const user = jwtDecode(authToken);
+      // if (user.institutionName.length > 0) {
+      //    // console.log("is library user");
+      //    this.setState({
+      //       isLibraryUser: true,
+      //    });
+      // } else {
+      //    this.setState({
+      //       isLibraryUser: false,
+      //    });
+      // }
    }
 
    render() {
