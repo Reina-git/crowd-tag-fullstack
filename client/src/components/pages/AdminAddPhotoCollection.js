@@ -10,6 +10,7 @@ import { withRouter } from "react-router-dom";
 import without from "lodash/without";
 import actions from "../../store/actions";
 import { v4 as getUuid } from "uuid";
+import axios from "axios";
 
 class AdminAddPhotoCollection extends React.Component {
    constructor(props) {
@@ -84,29 +85,59 @@ class AdminAddPhotoCollection extends React.Component {
       return photoName;
    }
 
+   backToCollections() {
+      this.props.dispatch({
+         type: actions.STORE_SELECTED_COLLECTION,
+         payload: [],
+      });
+
+      this.props.history.push("/admin-collections");
+   }
+
    addPhoto() {
       if (!this.checkHasInvalidCharCount()) {
          this.setPhotoUrlState();
-         const newPhotoObject = {
-            id: getUuid(),
-            collectionID: this.props.collection.id,
-            uploadedAt: Date.now(),
-            fileName: this.getPhotoName(),
-            url: document.getElementById("addPhotoInput").value,
-            dbAction: "add",
-            tags: [],
-         };
+         if (this.state.displayedPhotos === undefined) {
+            const newPhotoObject = {
+               id: getUuid(),
+               collectionID: getUuid(),
+               uploadedAt: Date.now(),
+               fileName: this.getPhotoName(),
+               url: document.getElementById("addPhotoInput").value,
+               dbAction: "add",
+               tags: [],
+            };
 
-         const copyOfDisplayedPhotos = [...this.state.displayedPhotos];
-         const updatedDisplayedPhotos = copyOfDisplayedPhotos.concat(
-            newPhotoObject
-         );
-         this.setState({
-            displayedPhotos: updatedDisplayedPhotos,
-         });
-         this.setState({ photoUrl: "" });
+            this.setState({
+               displayedPhotos: [newPhotoObject],
+            });
+            this.setState({ photoUrl: "" });
+            this.props.dispatch({
+               type: actions.STORE_SELECTED_COLLECTION,
+               payload: [newPhotoObject],
+            });
+            console.log("newPhotoObject", newPhotoObject);
+         } else {
+            const addedPhotoObject = {
+               id: getUuid(),
+               collectionID: this.state.displayedPhotos[0].collectionID,
+               uploadedAt: Date.now(),
+               fileName: this.getPhotoName(),
+               url: document.getElementById("addPhotoInput").value,
+               dbAction: "add",
+               tags: [],
+            };
+            const copyOfDisplayedPhotos = [...this.state.displayedPhotos];
+            const updatedDisplayedPhotos = copyOfDisplayedPhotos.concat(
+               addedPhotoObject
+            );
+            this.setState({
+               displayedPhotos: updatedDisplayedPhotos,
+            });
+            this.setState({ photoUrl: "" });
 
-         console.log("newPhotoObject", newPhotoObject);
+            console.log("added to existing collection", addedPhotoObject);
+         }
       }
    }
 
@@ -129,20 +160,29 @@ class AdminAddPhotoCollection extends React.Component {
          ...photo,
          dbAction: "remove",
       };
-      // console.log(deletePhotoFromServer.id);
-      // console.log(this.state.displayedPhoto.indexOf(deletePhotoFromServer));
+      // const deletedPhotoId = deletePhotoFromServer.id;
+      // const deletedPhotoIndex = photos.map((photo) => {
+      //    const photosFromProps = this.props.collection.photos;
+      //    console.log("all photos", photosFromProps);
+      //    const photoIdIndex = photosFromProps.findIndex((deletedPhotoId) => {});
+      //    return photoIdIndex;
+      // });
+      // console.log(deletedPhotoIndex);
+      // use find index
+
+      // const deletePhotoIndex = photosFromProps.findIndex((id) => {
+      //    return indexOf(deletedPhotoId);
+      // });
+      // console.log(deletePhotoIndex);
+      const photosFromProps = this.props.collection.photos;
       const deletedPhotoId = deletePhotoFromServer.id;
-
-      // console.log("deleted Photo Id", deletedPhotoId);
-      const indexOfDeletedPhoto = photos.indexOf(deletedPhotoId);
-      // console.log(indexOfDeletedPhoto);
-      const deletedPhotoIndex = photos.map((photo) => {
-         // console.log("does this id match", photo.id, "this id", deletedPhotoId);
-
-         const photoIdIndex = photo.id.indexOf(deletedPhotoId);
-         return photoIdIndex;
-      });
-      console.log(deletedPhotoIndex);
+      for (let i = 0; i < photosFromProps.length; i++) {
+         const photoId = photosFromProps[i].id;
+         if (photoId === deletedPhotoId) {
+            const index = i;
+            console.log("index", index);
+         }
+      }
    }
 
    deleteCollection() {
@@ -164,6 +204,15 @@ class AdminAddPhotoCollection extends React.Component {
 
    saveCollection() {
       const newCollection = {
+         id: getUuid(),
+         name: this.state.collectionTitle,
+         userId: this.props.currentUser.id,
+         createdAt: Date.now(),
+         institutionName: this.props.currentUser.institutionName,
+         photos: this.state.displayedPhotos,
+      };
+
+      const updatedCollection = {
          id: this.props.collection.id,
          name: this.state.collectionTitle,
          userId: this.props.collection.userId,
@@ -172,7 +221,20 @@ class AdminAddPhotoCollection extends React.Component {
          photos: this.state.displayedPhotos,
       };
       // console.log(this.props.collection.id);
-      console.log("updated collection", newCollection);
+      if (updatedCollection.id === undefined) {
+         console.log("this is a new collection");
+         console.log("new collection", newCollection);
+         axios
+            .post("/api/v1/adminAllCollections", newCollection)
+            .then((res) => {
+               console.log("posting new collection", res);
+            })
+            .catch((err) => {
+               console.log(err);
+            });
+      } else {
+         console.log("this collection needs to be updated");
+      }
    }
 
    render() {
@@ -180,7 +242,12 @@ class AdminAddPhotoCollection extends React.Component {
          <AppTemplate>
             <div className="row">
                <div className="col mt-6 mb-0">
-                  <Link to="/admin-collections" className="collection-link">
+                  <button
+                     className="collection-link btn btn-link"
+                     onClick={() => {
+                        this.backToCollections();
+                     }}
+                  >
                      <img
                         src={BackArrow}
                         width="15px"
@@ -188,7 +255,7 @@ class AdminAddPhotoCollection extends React.Component {
                         alt=""
                      />
                      Back to collections
-                  </Link>
+                  </button>
                </div>
             </div>
 
@@ -280,6 +347,7 @@ class AdminAddPhotoCollection extends React.Component {
                <Link to="" className="btn btn-outline-primary">
                   Cancel
                </Link>
+
                <button
                   className="btn btn-primary ml-4"
                   onClick={() => {
@@ -318,6 +386,7 @@ function mapStateToProps(state) {
    return {
       collection: state.selectedCollection,
       allCollections: state.allCollections,
+      currentUser: state.currentUser,
    };
 }
 

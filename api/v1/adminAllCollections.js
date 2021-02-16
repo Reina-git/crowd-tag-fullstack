@@ -7,6 +7,8 @@ const selectAdminCollections = require("../../queries/selectAdminCollections");
 // const { v4: getUuid } = require("uuid");
 const uniqBy = require("lodash/uniqBy");
 const validateJwt = require("../../utils/validatejwt");
+const insertCollection = require("../../queries/insertCollection");
+const insertPhotos = require("../../queries/insertPhotos");
 
 router.get("/", validateJwt, (req, res) => {
    // console.log("I am in adminAllCollections");
@@ -88,6 +90,46 @@ router.get("/", validateJwt, (req, res) => {
          console.log(err);
          res.status(400).json(err);
       });
+});
+
+router.post("/", async (req, res) => {
+   // console.log("req.body from add collection", req.body);
+   const collection = {
+      id: req.body.id,
+      name: req.body.name,
+      user_id: req.body.userId,
+      created_at: req.body.createdAt,
+   };
+
+   // console.log("photos", req.body.photos);
+   const collectionWithPhotos = { ...req.body };
+   console.log(collectionWithPhotos);
+   // const photos = req.body.map((photos) => {
+   //    // console.log("collection ID", photos.photoId);
+   //    return {
+   //       photos,
+   //    };
+   // });
+   // console.log(photos);
+
+   // await db
+   //    .query(insertCollection, collection)
+   //    .then((collection) => {
+   //       console.log("insertCollection", collection);
+   //    })
+   //    .catch((err) => {
+   //       console.log(err);
+   //       res.status(400).json(err);
+   //    });
+   // await db
+   //    .query(insertPhoto, photo)
+   //    .then((photo) => {
+   //       console.log("insertPhoto", photo);
+   //    })
+   //    .catch((err) => {
+   //       console.log(err);
+   //       res.status(400).json(err);
+   //    });
 });
 
 module.exports = router;
