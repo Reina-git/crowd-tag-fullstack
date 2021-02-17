@@ -101,35 +101,39 @@ router.post("/", async (req, res) => {
       created_at: req.body.createdAt,
    };
 
-   // console.log("photos", req.body.photos);
-   const collectionWithPhotos = { ...req.body };
-   console.log(collectionWithPhotos);
-   // const photos = req.body.map((photos) => {
-   //    // console.log("collection ID", photos.photoId);
-   //    return {
-   //       photos,
-   //    };
-   // });
-   // console.log(photos);
+   console.log("photos", req.body.photos);
+   const collectionWithPhotos = [...req.body.photos];
+   // console.log("collections with photos", collectionWithPhotos);
+   const photos = collectionWithPhotos.map((photo) => {
+      // console.log("collection ID", photo.id);
+      // const photoArray = [
+      //    photo.id,
+      //    photo.collectionID,
+      //    photo.uploadedAt,
+      //    photo.url,
+      // ];
+      return [photo.id, photo.collectionID, photo.uploadedAt, photo.url];
+   });
+   console.log("photos", photos);
 
-   // await db
-   //    .query(insertCollection, collection)
-   //    .then((collection) => {
-   //       console.log("insertCollection", collection);
-   //    })
-   //    .catch((err) => {
-   //       console.log(err);
-   //       res.status(400).json(err);
-   //    });
-   // await db
-   //    .query(insertPhoto, photo)
-   //    .then((photo) => {
-   //       console.log("insertPhoto", photo);
-   //    })
-   //    .catch((err) => {
-   //       console.log(err);
-   //       res.status(400).json(err);
-   //    });
+   await db
+      .query(insertCollection, collection)
+      .then((collection) => {
+         console.log("insertCollection", collection);
+      })
+      .catch((err) => {
+         console.log(err);
+         res.status(400).json(err);
+      });
+   await db
+      .query(insertPhotos, photos)
+      .then((photos) => {
+         console.log("insertPhoto", photos);
+      })
+      .catch((err) => {
+         console.log(err);
+         res.status(400).json(err);
+      });
 });
 
 module.exports = router;

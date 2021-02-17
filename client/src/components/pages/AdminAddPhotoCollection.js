@@ -23,7 +23,7 @@ class AdminAddPhotoCollection extends React.Component {
          displayedPhotos: [],
          collectionTitle: this.props.collection.name,
          photoUrl: "",
-         // collectionToSave: {},
+         newCollection: {},
       };
       this.deletePhoto = this.deletePhoto.bind(this);
       this.setPhotoUrlText = this.setPhotoUrlText.bind(this);
@@ -34,10 +34,27 @@ class AdminAddPhotoCollection extends React.Component {
    }
 
    setCollection() {
-      const allPhotos = this.props.collection.photos;
-      this.setState({
-         displayedPhotos: allPhotos,
-      });
+      console.log("set collection");
+      if (this.props.collection.id === undefined) {
+         const newCollectionPlaceholder = {
+            createdAt: Date.now(),
+            id: getUuid(),
+            institutionName: "",
+            name: "",
+            photos: [],
+            userId: this.props.currentUser.institutionName,
+         };
+         console.log("new collection", newCollectionPlaceholder);
+         this.setState({
+            newCollection: newCollectionPlaceholder,
+         });
+      } else {
+         console.log("there is a collection", this.props.collection.photos);
+         const allPhotos = this.props.collection.photos;
+         this.setState({
+            displayedPhotos: allPhotos,
+         });
+      }
    }
 
    setCollectionTitleText(e) {
@@ -74,7 +91,7 @@ class AdminAddPhotoCollection extends React.Component {
 
    setPhotoUrlText(e) {
       this.setState({ photoUrl: e.target.value });
-      console.log("text input", e.target.value);
+      // console.log("text input", e.target.value);
    }
 
    getPhotoName() {
@@ -97,11 +114,12 @@ class AdminAddPhotoCollection extends React.Component {
    addPhoto() {
       if (!this.checkHasInvalidCharCount()) {
          this.setPhotoUrlState();
-         if (this.state.displayedPhotos === undefined) {
+         console.log("displayedPhotos", this.state.displayedPhotos);
+         if (this.state.displayedPhotos.length <= 0) {
             const newPhotoObject = {
                id: getUuid(),
-               collectionID: getUuid(),
-               uploadedAt: Date.now(),
+               collectionID: this.state.newCollection.id,
+               uploadedAt: this.state.newCollection.createdAt,
                fileName: this.getPhotoName(),
                url: document.getElementById("addPhotoInput").value,
                dbAction: "add",
@@ -118,6 +136,7 @@ class AdminAddPhotoCollection extends React.Component {
             });
             console.log("newPhotoObject", newPhotoObject);
          } else {
+            console.log("not a new photo");
             const addedPhotoObject = {
                id: getUuid(),
                collectionID: this.state.displayedPhotos[0].collectionID,
@@ -134,6 +153,7 @@ class AdminAddPhotoCollection extends React.Component {
             this.setState({
                displayedPhotos: updatedDisplayedPhotos,
             });
+
             this.setState({ photoUrl: "" });
 
             console.log("added to existing collection", addedPhotoObject);
@@ -204,10 +224,10 @@ class AdminAddPhotoCollection extends React.Component {
 
    saveCollection() {
       const newCollection = {
-         id: getUuid(),
+         id: this.state.newCollection.id,
          name: this.state.collectionTitle,
          userId: this.props.currentUser.id,
-         createdAt: Date.now(),
+         createdAt: this.state.newCollection.createdAt,
          institutionName: this.props.currentUser.institutionName,
          photos: this.state.displayedPhotos,
       };
@@ -222,8 +242,9 @@ class AdminAddPhotoCollection extends React.Component {
       };
       // console.log(this.props.collection.id);
       if (updatedCollection.id === undefined) {
-         console.log("this is a new collection");
+         // console.log("this is a new collection");
          console.log("new collection", newCollection);
+         console.log("photos", this.state.displayedPhotos);
          axios
             .post("/api/v1/adminAllCollections", newCollection)
             .then((res) => {
