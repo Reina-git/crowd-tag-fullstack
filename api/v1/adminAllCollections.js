@@ -101,17 +101,10 @@ router.post("/", async (req, res) => {
       created_at: req.body.createdAt,
    };
 
-   console.log("photos", req.body.photos);
+   // console.log("photos", req.body.photos);
    const collectionWithPhotos = [...req.body.photos];
    // console.log("collections with photos", collectionWithPhotos);
    const photos = collectionWithPhotos.map((photo) => {
-      // console.log("collection ID", photo.id);
-      // const photoArray = [
-      //    photo.id,
-      //    photo.collectionID,
-      //    photo.uploadedAt,
-      //    photo.url,
-      // ];
       return [photo.id, photo.collectionID, photo.uploadedAt, photo.url];
    });
    console.log("photos", photos);
@@ -126,7 +119,7 @@ router.post("/", async (req, res) => {
          res.status(400).json(err);
       });
    await db
-      .query(insertPhotos, photos)
+      .query(insertPhotos, [photos])
       .then((photos) => {
          console.log("insertPhoto", photos);
       })
