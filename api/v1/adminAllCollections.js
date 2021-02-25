@@ -9,6 +9,8 @@ const uniqBy = require("lodash/uniqBy");
 const validateJwt = require("../../utils/validatejwt");
 const insertCollection = require("../../queries/insertCollection");
 const insertPhotos = require("../../queries/insertPhotos");
+const updateCollection = require("../../queries/updateCollection");
+// const { getPhotoName } = require("../../utils/helpers");
 
 router.get("/", validateJwt, (req, res) => {
    // console.log("I am in adminAllCollections");
@@ -58,7 +60,7 @@ router.get("/", validateJwt, (req, res) => {
                         id: collectionPhoto.photoId,
                         collectionID: collectionPhoto.collectionId,
                         uploadedAt: collectionPhoto.photoUploadedAt,
-                        fileName: "replaceMe", //write a function that gets the file name from the end of the URL
+                        fileName: "Replace Me", //write a function that gets the file name from the end of the URL
                         url: collectionPhoto.photoUrl,
                         tags: camelCaseCollections
                            .map((camelCaseCollection) => {
@@ -126,6 +128,62 @@ router.post("/", async (req, res) => {
       .catch((err) => {
          console.log(err);
          res.status(400).json(err);
+      });
+});
+
+// updating already existing collection
+
+router.put("/", async (req, res) => {
+   // console.log("req.body from update collection", req.body);
+   // console.log("params", req.params);
+   const collectionId = req.body.id;
+   // console.log("collectionID", collectionId);
+   const collectionName = req.body.name;
+
+   // console.log("photos", req.body.photos);
+   const collectionPhotos = [...req.body.photos];
+   // console.log("collections with photos", collectionWithPhotos);
+   const photos = collectionPhotos
+      .filter((newPhotos) => {
+         return newPhotos.dbAction === "add";
+      })
+      .map((photo) => {
+         return [photo.id, photo.collectionID, photo.uploadedAt, photo.url];
+      });
+   console.log("photos", photos);
+
+   await db
+      .query(updateCollection, [collectionName, collectionId])
+      .then((dbRes) => {
+         console.log("update collection", dbRes);
+         return res.status(200).json({ success: "collection updated" });
+      })
+      .catch((err) => {
+         console.log(err);
+         res.status(400).json(err);
+      });
+   await db
+      .query(insertPhotos, [photos])
+      .then((photos) => {
+         console.log("insertPhoto", photos);
+      })
+      .catch((err) => {
+         console.log(err);
+         res.status(400).json(err);
+      });
+});
+
+router.delete("/:id", validateJwt, (req, res) => {
+   console.log("looking for tag id", req.params);
+   const id = req.params.id;
+   db.query(deleteXrefById, id)
+      .then(() => {
+         return res.status(200).json({ success: "tag deleted" });
+      })
+      .catch((err) => {
+         console.log(err);
+         const dbError = `${err.code} ${err.sqlMessage}`;
+         return res.status(500).json({ dbError });
       });
 });
 

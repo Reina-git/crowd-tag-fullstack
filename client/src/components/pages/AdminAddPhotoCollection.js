@@ -255,6 +255,15 @@ class AdminAddPhotoCollection extends React.Component {
             });
       } else {
          console.log("this collection needs to be updated");
+         console.log("updated collection", updatedCollection);
+         axios
+            .put("/api/v1/adminAllCollections", updatedCollection)
+            .then((res) => {
+               console.log("posting updated collection", res);
+            })
+            .catch((err) => {
+               console.log(err);
+            });
       }
    }
 
