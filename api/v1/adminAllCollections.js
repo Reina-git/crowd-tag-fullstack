@@ -152,25 +152,40 @@ router.put("/", async (req, res) => {
       });
    console.log("photos", photos);
 
-   await db
-      .query(updateCollection, [collectionName, collectionId])
-      .then((dbRes) => {
-         console.log("update collection", dbRes);
-         return res.status(200).json({ success: "collection updated" });
-      })
-      .catch((err) => {
-         console.log(err);
-         res.status(400).json(err);
-      });
-   await db
-      .query(insertPhotos, [photos])
-      .then((photos) => {
-         console.log("insertPhoto", photos);
-      })
-      .catch((err) => {
-         console.log(err);
-         res.status(400).json(err);
-      });
+   if (photos.length === 0) {
+      console.log("there are no new photos");
+      await db
+         .query(updateCollection, [collectionName, collectionId])
+         .then((dbRes) => {
+            console.log("update collection", dbRes);
+            return res.status(200).json({ success: "collection updated" });
+         })
+         .catch((err) => {
+            console.log(err);
+            res.status(400).json(err);
+         });
+   } else {
+      console.log("I have new photos to add");
+      await db
+         .query(updateCollection, [collectionName, collectionId])
+         .then((dbRes) => {
+            console.log("update collection", dbRes);
+            return res.status(200).json({ success: "collection updated" });
+         })
+         .catch((err) => {
+            console.log(err);
+            res.status(400).json(err);
+         });
+      await db
+         .query(insertPhotos, [photos])
+         .then((photos) => {
+            console.log("insertPhoto", photos);
+         })
+         .catch((err) => {
+            console.log(err);
+            res.status(400).json(err);
+         });
+   }
 });
 
 router.delete("/:id", validateJwt, (req, res) => {

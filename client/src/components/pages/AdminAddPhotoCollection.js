@@ -265,6 +265,7 @@ class AdminAddPhotoCollection extends React.Component {
                console.log(err);
             });
       }
+      this.props.history.push("/admin-collections");
    }
 
    render() {
