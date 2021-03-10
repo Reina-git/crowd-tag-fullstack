@@ -87,23 +87,13 @@ router.delete("/:id", validateJwt, (req, res) => {
    const id = req.params.id;
    db.query(deleteXrefById, id)
       .then(() => {
-         return res.status(200).json({ success: "tag deleted" });
+         return res.status(200).json({ success: "xref deleted" });
       })
       .catch((err) => {
          console.log(err);
          const dbError = `${err.code} ${err.sqlMessage}`;
          return res.status(500).json({ dbError });
       });
-   // await db
-   //    .query(deleteXrefById, id)
-   //    .then(() => {
-   //       return res.status(200).json({ success: "xref deleted" });
-   //    })
-   //    .catch((err) => {
-   //       console.log(err);
-   //       const dbError = `${err.code} ${err.sqlMessage}`;
-   //       return res.status(500).json({ dbError });
-   //    });
 });
 
 module.exports = router;

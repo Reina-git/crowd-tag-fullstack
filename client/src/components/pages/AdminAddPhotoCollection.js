@@ -162,24 +162,36 @@ class AdminAddPhotoCollection extends React.Component {
    }
 
    deletePhoto(photo) {
-      const deletePhotoFromDisplay = photo;
+      const deletePhoto = photo;
       // console.log("index of deleted photo", this.props.collection.photos);
       const photos = this.state.displayedPhotos;
-      const filteredPhotos = without(photos, deletePhotoFromDisplay);
+      const filteredPhotos = without(photos, deletePhoto);
       // console.log("filteredPhotos", filteredPhotos);
       this.setState({
          displayedPhotos: filteredPhotos,
       });
+
+      axios
+         .delete(`/api/v1/adminAllCollections/${deletePhoto.id}`)
+         .then((res) => {
+            console.log(res.data);
+            this.setState({
+               displayedPhotos: filteredPhotos,
+            });
+         })
+         .catch((err) => {
+            console.log(err.response.data);
+         });
 
       // replace old photo with deleted photo
       // find index of where the og photo is
       // replace the object at that index
       // now we have the new array and set the state with the new array
 
-      const deletePhotoFromServer = {
-         ...photo,
-         dbAction: "remove",
-      };
+      // const deletePhotoFromServer = {
+      //    ...photo,
+      //    dbAction: "remove",
+      // };
       // const deletedPhotoId = deletePhotoFromServer.id;
       // const deletedPhotoIndex = photos.map((photo) => {
       //    const photosFromProps = this.props.collection.photos;
@@ -194,15 +206,15 @@ class AdminAddPhotoCollection extends React.Component {
       //    return indexOf(deletedPhotoId);
       // });
       // console.log(deletePhotoIndex);
-      const photosFromProps = this.props.collection.photos;
-      const deletedPhotoId = deletePhotoFromServer.id;
-      for (let i = 0; i < photosFromProps.length; i++) {
-         const photoId = photosFromProps[i].id;
-         if (photoId === deletedPhotoId) {
-            const index = i;
-            console.log("index", index);
-         }
-      }
+      // const photosFromProps = this.props.collection.photos;
+      // const deletedPhotoId = deletePhotoFromServer.id;
+      // for (let i = 0; i < photosFromProps.length; i++) {
+      //    const photoId = photosFromProps[i].id;
+      //    if (photoId === deletedPhotoId) {
+      //       const index = i;
+      //       console.log("index", index);
+      //    }
+      // }
    }
 
    deleteCollection() {

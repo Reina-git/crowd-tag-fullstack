@@ -11,7 +11,8 @@ const insertCollection = require("../../queries/insertCollection");
 const insertPhotos = require("../../queries/insertPhotos");
 const updateCollection = require("../../queries/updateCollection");
 // const { getPhotoName } = require("../../utils/helpers");
-
+const deletePhotoById = require("../../queries/deletePhotoById");
+const deleteAllTagsForPhoto = require("../../queries/deleteAllTagsForPhoto");
 router.get("/", validateJwt, (req, res) => {
    // console.log("I am in adminAllCollections");
    const user_id = req.user.id;
@@ -102,7 +103,6 @@ router.post("/", async (req, res) => {
       user_id: req.body.userId,
       created_at: req.body.createdAt,
    };
-
    // console.log("photos", req.body.photos);
    const collectionWithPhotos = [...req.body.photos];
    // console.log("collections with photos", collectionWithPhotos);
@@ -188,12 +188,29 @@ router.put("/", async (req, res) => {
    }
 });
 
-router.delete("/:id", validateJwt, (req, res) => {
+// @route   Delete api/v1/adminAllCollections/:id
+// @desc    Delete selectedUser
+// @access  Private
+
+router.delete("/:id", validateJwt, async (req, res) => {
    console.log("looking for tag id", req.params);
    const id = req.params.id;
-   db.query(deleteXrefById, id)
+
+   await db
+      .query(deleteAllTagsForPhoto, id)
       .then(() => {
-         return res.status(200).json({ success: "tag deleted" });
+         console.log("delete photo");
+      })
+      .catch((err) => {
+         console.log(err);
+         const dbError = `${err.code} ${err.sqlMessage}`;
+         return res.status(500).json({ dbError });
+      });
+
+   await db
+      .query(deletePhotoById, id)
+      .then(() => {
+         return res.status(200).json({ success: "photo deleted" });
       })
       .catch((err) => {
          console.log(err);
@@ -201,5 +218,13 @@ router.delete("/:id", validateJwt, (req, res) => {
          return res.status(500).json({ dbError });
       });
 });
+
+// @route   Delete api/v1/adminAllCollections/:id
+// Delete all tags for all photo ids
+// delete all photos for collection id
+// delete collection
+
+// @desc    Delete selectedCollection
+// @access  Private
 
 module.exports = router;
