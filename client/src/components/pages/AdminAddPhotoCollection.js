@@ -164,6 +164,7 @@ class AdminAddPhotoCollection extends React.Component {
    deletePhoto(photo) {
       const deletePhoto = photo;
       // console.log("index of deleted photo", this.props.collection.photos);
+      // console.log("delete this photo", deletePhoto);
       const photos = this.state.displayedPhotos;
       const filteredPhotos = without(photos, deletePhoto);
       // console.log("filteredPhotos", filteredPhotos);
@@ -172,7 +173,7 @@ class AdminAddPhotoCollection extends React.Component {
       });
 
       axios
-         .delete(`/api/v1/adminAllCollections/${deletePhoto.id}`)
+         .delete(`/api/v1/photos/${deletePhoto.id}`)
          .then((res) => {
             console.log(res.data);
             this.setState({
@@ -182,53 +183,32 @@ class AdminAddPhotoCollection extends React.Component {
          .catch((err) => {
             console.log(err.response.data);
          });
-
-      // replace old photo with deleted photo
-      // find index of where the og photo is
-      // replace the object at that index
-      // now we have the new array and set the state with the new array
-
-      // const deletePhotoFromServer = {
-      //    ...photo,
-      //    dbAction: "remove",
-      // };
-      // const deletedPhotoId = deletePhotoFromServer.id;
-      // const deletedPhotoIndex = photos.map((photo) => {
-      //    const photosFromProps = this.props.collection.photos;
-      //    console.log("all photos", photosFromProps);
-      //    const photoIdIndex = photosFromProps.findIndex((deletedPhotoId) => {});
-      //    return photoIdIndex;
-      // });
-      // console.log(deletedPhotoIndex);
-      // use find index
-
-      // const deletePhotoIndex = photosFromProps.findIndex((id) => {
-      //    return indexOf(deletedPhotoId);
-      // });
-      // console.log(deletePhotoIndex);
-      // const photosFromProps = this.props.collection.photos;
-      // const deletedPhotoId = deletePhotoFromServer.id;
-      // for (let i = 0; i < photosFromProps.length; i++) {
-      //    const photoId = photosFromProps[i].id;
-      //    if (photoId === deletedPhotoId) {
-      //       const index = i;
-      //       console.log("index", index);
-      //    }
-      // }
    }
 
-   deleteCollection() {
-      console.log(this.props.allCollections);
-      const deletedCollection = this.props.collection;
-      const allCollections = this.props.allCollections;
-      const filteredCollections = without(allCollections, deletedCollection);
+   deleteCollection(collection) {
+      const deleteCollection = collection;
+      console.log("delete this collection", deleteCollection);
+      // console.log(this.props.allCollections);
+      // const deletedCollection = this.props.collection;
+      // const allCollections = this.props.allCollections;
+      // const filteredCollections = without(allCollections, deletedCollection);
       // console.log(filteredCards);
-      this.props.dispatch({
-         type: actions.STORE_ALL_COLLECTIONS,
-         payload: filteredCollections,
-      });
+
+      // axios
+      //    .delete(`/api/v1/adminAllCollections/${deleteCollection}`)
+      //    .then((res) => {
+      //       console.log("res.data", res.data);
+      //       this.props.dispatch({
+      //          type: actions.STORE_ALL_COLLECTIONS,
+      //          payload: filteredCollections,
+      //       });
+      //    })
+      //    .catch((err) => {
+      //       console.log(err.response.data);
+      //    });
+
       // if (filteredCards[this.props.queue.index] === undefined) {
-      this.props.history.push("/admin-collections");
+      // this.props.history.push("/admin-collections");
       // } else {
       //    this.props.history.push("/review-imagery");
       // }

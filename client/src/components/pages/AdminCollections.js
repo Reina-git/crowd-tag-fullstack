@@ -54,20 +54,43 @@ class AdminCollections extends React.Component {
          });
    }
 
+   // deleteCollection(collection) {
+   //    // console.log("inside delete function");
+   //    const deletedCollection = collection;
+   //    // console.log(" deletedCollection", deletedCollection);
+   //    const collections = this.state.displayedCollections;
+   //    // console.log("collection", collection);
+   //    const filteredCollections = without(collections, deletedCollection);
+   //    // console.log("filteredCollections", filteredCollections);
+   //    //
+   //    this.setState({
+   //       displayedCollections: filteredCollections,
+   //    });
+   //    // console.log("collection", collection);
+   //    // console.log("filtered tags", filteredTags);
+   // }
+
    deleteCollection(collection) {
-      // console.log("inside delete function");
-      const deletedCollection = collection;
-      // console.log(" deletedCollection", deletedCollection);
-      const collections = this.state.displayedCollections;
-      // console.log("collection", collection);
-      const filteredCollections = without(collections, deletedCollection);
-      // console.log("filteredCollections", filteredCollections);
-      //
-      this.setState({
-         displayedCollections: filteredCollections,
-      });
-      // console.log("collection", collection);
-      // console.log("filtered tags", filteredTags);
+      const deleteCollection = collection;
+      console.log("delete this collection", deleteCollection.id);
+      console.log(this.props.allCollections);
+      const deletedCollection = this.props.collection;
+      const allCollections = this.props.allCollections;
+      const filteredCollections = without(allCollections, deletedCollection);
+      console.log(filteredCollections);
+
+      axios
+         .delete(`/api/v1/adminAllCollections/${deleteCollection.id}`)
+         .then((res) => {
+            console.log("res.data", res.data);
+            this.props.dispatch({
+               type: actions.STORE_ALL_COLLECTIONS,
+               payload: filteredCollections,
+            });
+         })
+         .catch((err) => {
+            console.log(err.response.data);
+         });
    }
 
    render() {

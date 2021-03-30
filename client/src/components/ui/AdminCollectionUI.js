@@ -16,9 +16,9 @@ function AdminCollectionUI(props) {
    return (
       <div
          className="row mt-8"
-         onClick={() => {
-            goToCollection();
-         }}
+         // onClick={() => {
+         //    goToCollection();
+         // }}
       >
          <div className="col-4 col-sm-4">
             <div className="img-square">

@@ -1,4 +1,4 @@
-// The memory-cards resouce
+// The admin collection resouce
 const express = require("express");
 const router = express.Router();
 const db = require("../../db");
@@ -13,6 +13,7 @@ const updateCollection = require("../../queries/updateCollection");
 // const { getPhotoName } = require("../../utils/helpers");
 const deletePhotoById = require("../../queries/deletePhotoById");
 const deleteAllTagsForPhoto = require("../../queries/deleteAllTagsForPhoto");
+const deleteAllTagsForCollection = require("../../queries/deleteAllPhotosForCollection");
 router.get("/", validateJwt, (req, res) => {
    // console.log("I am in adminAllCollections");
    const user_id = req.user.id;
@@ -189,15 +190,18 @@ router.put("/", async (req, res) => {
 });
 
 // @route   Delete api/v1/adminAllCollections/:id
-// @desc    Delete selectedUser
+// Delete all tags for all photo ids
+// delete all photos for collection id
+// delete collection
+
+// @desc    Delete selectedCollection
 // @access  Private
 
-router.delete("/:id", validateJwt, async (req, res) => {
-   console.log("looking for tag id", req.params);
-   const id = req.params.id;
+router.delete("/:id", validateJwt, (req, res) => {
+   console.log("looking for collection", req.params);
+   const id = req.params;
 
-   await db
-      .query(deleteAllTagsForPhoto, id)
+   db.query(deleteAllTagsForCollection, id)
       .then(() => {
          console.log("delete photo");
       })
@@ -207,24 +211,16 @@ router.delete("/:id", validateJwt, async (req, res) => {
          return res.status(500).json({ dbError });
       });
 
-   await db
-      .query(deletePhotoById, id)
-      .then(() => {
-         return res.status(200).json({ success: "photo deleted" });
-      })
-      .catch((err) => {
-         console.log(err);
-         const dbError = `${err.code} ${err.sqlMessage}`;
-         return res.status(500).json({ dbError });
-      });
+   // await db
+   //    .query(deletePhotoById, id)
+   //    .then(() => {
+   //       return res.status(200).json({ success: "photo deleted" });
+   //    })
+   //    .catch((err) => {
+   //       console.log(err);
+   //       const dbError = `${err.code} ${err.sqlMessage}`;
+   //       return res.status(500).json({ dbError });
+   //    });
 });
-
-// @route   Delete api/v1/adminAllCollections/:id
-// Delete all tags for all photo ids
-// delete all photos for collection id
-// delete collection
-
-// @desc    Delete selectedCollection
-// @access  Private
 
 module.exports = router;
