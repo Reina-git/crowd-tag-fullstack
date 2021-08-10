@@ -54,33 +54,24 @@ class AdminCollections extends React.Component {
          });
    }
 
-   // deleteCollection(collection) {
-   //    // console.log("inside delete function");
-   //    const deletedCollection = collection;
-   //    // console.log(" deletedCollection", deletedCollection);
-   //    const collections = this.state.displayedCollections;
-   //    // console.log("collection", collection);
-   //    const filteredCollections = without(collections, deletedCollection);
-   //    // console.log("filteredCollections", filteredCollections);
-   //    //
-   //    this.setState({
-   //       displayedCollections: filteredCollections,
-   //    });
-   //    // console.log("collection", collection);
-   //    // console.log("filtered tags", filteredTags);
-   // }
-
    deleteCollection(collection) {
-      const deleteCollection = collection;
-      console.log("delete this collection", deleteCollection.id);
-      console.log(this.props.allCollections);
+      // const deleteCollection = collection;
+      // console.log("delete this collection", deleteCollection);
+      const photos = collection.photos;
+      console.log("photos", photos);
+      const photoIds = photos.map((photo) => {
+         return photo.id;
+      });
+      console.log("photoIds", photoIds);
+
+      // console.log(this.props.allCollections);
       const deletedCollection = this.props.collection;
       const allCollections = this.props.allCollections;
       const filteredCollections = without(allCollections, deletedCollection);
-      console.log(filteredCollections);
+      // console.log(filteredCollections);
 
       axios
-         .delete(`/api/v1/adminAllCollections/${deleteCollection.id}`)
+         .delete(`/api/v1/deleteCollection/`, { ids: photoIds })
          .then((res) => {
             console.log("res.data", res.data);
             this.props.dispatch({

@@ -13,7 +13,7 @@ const updateCollection = require("../../queries/updateCollection");
 // const { getPhotoName } = require("../../utils/helpers");
 const deletePhotoById = require("../../queries/deletePhotoById");
 const deleteAllTagsForPhoto = require("../../queries/deleteAllTagsForPhoto");
-const deleteAllTagsForCollection = require("../../queries/deleteAllPhotosForCollection");
+const deleteAllTagsForCollection = require("../../queries/deleteAllTagsForCollection");
 router.get("/", validateJwt, (req, res) => {
    // console.log("I am in adminAllCollections");
    const user_id = req.user.id;
@@ -198,12 +198,12 @@ router.put("/", async (req, res) => {
 // @access  Private
 
 router.delete("/:id", validateJwt, (req, res) => {
-   console.log("looking for collection", req.params);
+   // console.log("looking for collection", req.params);
    const id = req.params;
-
+   console.log("delete tags with the photo ids:", id);
    db.query(deleteAllTagsForCollection, id)
       .then(() => {
-         console.log("delete photo");
+         console.log("delete tags");
       })
       .catch((err) => {
          console.log(err);
