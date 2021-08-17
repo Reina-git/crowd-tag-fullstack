@@ -14,6 +14,8 @@ const updateCollection = require("../../queries/updateCollection");
 const deletePhotoById = require("../../queries/deletePhotoById");
 const deleteAllTagsForPhoto = require("../../queries/deleteAllTagsForPhoto");
 const deleteAllTagsForCollection = require("../../queries/deleteAllTagsForCollection");
+const { get } = require("lodash");
+
 router.get("/", validateJwt, (req, res) => {
    // console.log("I am in adminAllCollections");
    const user_id = req.user.id;
@@ -58,11 +60,16 @@ router.get("/", validateJwt, (req, res) => {
                      return camelCaseCollection.collectionId === collection.id;
                   })
                   .map((collectionPhoto) => {
+                     const url = collectionPhoto.photoUrl;
+                     const splitUrl = url.split("/");
+                     const reverseSplitUrl = splitUrl.reverse();
+                     const photoName = reverseSplitUrl[0];
                      return {
                         id: collectionPhoto.photoId,
                         collectionID: collectionPhoto.collectionId,
                         uploadedAt: collectionPhoto.photoUploadedAt,
-                        fileName: "Replace Me", //write a function that gets the file name from the end of the URL
+                        fileName: photoName,
+                        // fileName: getPhotoName(collectionPhoto.photoUrl),
                         url: collectionPhoto.photoUrl,
                         tags: camelCaseCollections
                            .map((camelCaseCollection) => {

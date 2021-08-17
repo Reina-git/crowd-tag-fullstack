@@ -10,7 +10,7 @@ app.use("/api/v1/adminAllCollections", require("./api/v1/adminAllCollections"));
 app.use("/api/v1/tags", require("./api/v1/tags"));
 app.use("/api/v1/photos", require("./api/v1/photos"));
 app.use("/api/v1/deleteCollection", require("./api/v1/deleteCollection"));
-app.use("/api/v1/s3photos", require("./api/v1/s3photos"));
+// app.use("/api/v1/s3photos", require("./api/v1/s3photos"));
 app.use("/api/v1/test-users", require("./api/v1/test-users"));
 
 app.use(express.static("client/build"));

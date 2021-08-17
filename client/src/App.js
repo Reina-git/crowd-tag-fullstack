@@ -14,6 +14,7 @@ import store from "./store/store";
 import actions from "./store/actions";
 import axios from "axios";
 import S3 from "./components/pages/S3";
+// import AdminS3 from "./components/pages/AdminS3";
 const authToken = localStorage.authToken;
 
 if (authToken) {
@@ -60,6 +61,7 @@ function App() {
                component={AdminCollections}
             />
             <Route exact path="/collection" component={Collection} />
+            {/* <Route exact path="/admin-s3" component={AdminS3} /> */}
             <Route exact path="/image" component={Image} />
             <Route exact path="/library-log-in" component={LibraryLogin} />
             <Route exact path="/log-in" component={Login} />

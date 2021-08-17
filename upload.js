@@ -7,7 +7,7 @@ const multerS3 = require("multer-s3");
 const { v4: getUuid } = require("uuid"); // must be installed on the server!
 
 const bucket = "crowdtag-demo";
-console.log("I am in upload.js");
+// console.log("I am in upload.js");
 // 5
 const s3Config = new aws.S3({
    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -29,16 +29,19 @@ const multerS3Config = multerS3({
    contentType: multerS3.AUTO_CONTENT_TYPE,
    key: function (req, file, cb) {
       // console.log(req.user); // can include the user's info in the filename!
+      // const fileExt = getExtension(file.originalname);
+      // const filename = `${file.fieldname}-${getUuid()}${fileExt}`;
       const fileExt = getExtension(file.originalname);
-      const filename = `${file.fieldname}-${getUuid()}${fileExt}`;
+      const filename = `${file.originalname}`;
+      // console.log("filename", filename);
       cb(null, filename);
    },
 });
-console.log("multer s3config", multerS3Config);
+// console.log("multer s3config", multerS3Config);
 
 // 2
 const fileFilter = (req, file, cb) => {
-   console.log("The file is:", file);
+   // console.log("The file is:", file);
    if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
       // console.log("this is a jpg or png");
       cb(null, true);

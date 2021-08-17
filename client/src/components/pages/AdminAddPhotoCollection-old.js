@@ -24,8 +24,6 @@ class AdminAddPhotoCollection extends React.Component {
          collectionTitle: this.props.collection.name,
          photoUrl: "",
          newCollection: {},
-         photoUploadText: "Choose a file",
-         photoUploadFile: {},
       };
       this.deletePhoto = this.deletePhoto.bind(this);
       this.setPhotoUrlText = this.setPhotoUrlText.bind(this);
@@ -97,28 +95,11 @@ class AdminAddPhotoCollection extends React.Component {
    }
 
    getPhotoName() {
-      const url = document.getElementById("photo-upload").value;
-      // console.log("url", url);
-      const splitUrl = url.split("\\");
-      // console.log("splitUrl", splitUrl);
+      const url = document.getElementById("addPhotoInput").value;
+      const splitUrl = url.split("/");
       const reverseSplitUrl = splitUrl.reverse();
       const photoName = reverseSplitUrl[0];
-      // console.log("photoName", photoName);
       return photoName;
-   }
-
-   getPhotoURL() {
-      const url = document.getElementById("photo-upload").value;
-      // console.log("url", url);
-      const splitUrl = url.split("\\");
-      // console.log("splitUrl", splitUrl);
-      const reverseSplitUrl = splitUrl.reverse();
-      const photoName = reverseSplitUrl[0];
-      // console.log("photoName", photoName);
-      const aws = "https://crowdtag-demo.s3.amazonaws.com/";
-      const photoUrl = aws.concat(photoName);
-      console.log("photoUrl", photoUrl);
-      return photoUrl;
    }
 
    backToCollections() {
@@ -130,85 +111,53 @@ class AdminAddPhotoCollection extends React.Component {
       this.props.history.push("/admin-collections");
    }
 
-   setPhotoUploadText(e) {
-      const file = e.target.files[0];
-      if (file) {
-         this.setState({
-            photoUploadText: file.name,
-            photoUploadFile: file,
-         });
-      } else {
-         this.setState({
-            photoUploadText: "Choose a file",
-            photoUploadFile: {},
-         });
-      }
-   }
-
-   saveProfile(e) {
-      e.preventDefault();
-      const formData = new FormData();
-      formData.append("profile-photo", this.state.photoUploadFile); // what you want in the url of the image
-      // console.log("testing");
-      axios
-         .post("/api/v1/test-users", formData)
-         .then((res) => {
-            console.log(res.data);
-         })
-         .catch((err) => {
-            console.log(err.response.data);
-         });
-      this.addPhoto();
-   }
-
    addPhoto() {
-      console.log("addPhoto");
-      // if (!this.checkHasInvalidCharCount()) {
-      //    this.setPhotoUrlState();
-      //    console.log("displayedPhotos", this.state.displayedPhotos);
-      if (this.state.displayedPhotos.length <= 0) {
-         console.log("this is a new collection");
-         const newPhotoObject = {
-            id: getUuid(),
-            collectionID: this.state.newCollection.id,
-            uploadedAt: this.state.newCollection.createdAt,
-            fileName: this.getPhotoName(),
-            url: this.getPhotoURL(),
-            dbAction: "add",
-            tags: [],
-         };
+      if (!this.checkHasInvalidCharCount()) {
+         this.setPhotoUrlState();
+         console.log("displayedPhotos", this.state.displayedPhotos);
+         if (this.state.displayedPhotos.length <= 0) {
+            const newPhotoObject = {
+               id: getUuid(),
+               collectionID: this.state.newCollection.id,
+               uploadedAt: this.state.newCollection.createdAt,
+               fileName: this.getPhotoName(),
+               url: document.getElementById("addPhotoInput").value,
+               dbAction: "add",
+               tags: [],
+            };
 
-         this.setState({
-            displayedPhotos: [newPhotoObject],
-         });
-         this.setState({ photoUrl: "" });
-         this.props.dispatch({
-            type: actions.STORE_SELECTED_COLLECTION,
-            payload: [newPhotoObject],
-         });
-         console.log("newPhotoObject", newPhotoObject);
-      } else {
-         console.log("not a new collection");
-         const addedPhotoObject = {
-            id: getUuid(),
-            collectionID: this.state.displayedPhotos[0].collectionID,
-            uploadedAt: Date.now(),
-            fileName: this.getPhotoName(),
-            url: this.getPhotoURL(),
-            dbAction: "add",
-            tags: [],
-         };
-         const copyOfDisplayedPhotos = [...this.state.displayedPhotos];
-         const updatedDisplayedPhotos = copyOfDisplayedPhotos.concat(
-            addedPhotoObject
-         );
-         this.setState({
-            displayedPhotos: updatedDisplayedPhotos,
-         });
+            this.setState({
+               displayedPhotos: [newPhotoObject],
+            });
+            this.setState({ photoUrl: "" });
+            this.props.dispatch({
+               type: actions.STORE_SELECTED_COLLECTION,
+               payload: [newPhotoObject],
+            });
+            console.log("newPhotoObject", newPhotoObject);
+         } else {
+            console.log("not a new photo");
+            const addedPhotoObject = {
+               id: getUuid(),
+               collectionID: this.state.displayedPhotos[0].collectionID,
+               uploadedAt: Date.now(),
+               fileName: this.getPhotoName(),
+               url: document.getElementById("addPhotoInput").value,
+               dbAction: "add",
+               tags: [],
+            };
+            const copyOfDisplayedPhotos = [...this.state.displayedPhotos];
+            const updatedDisplayedPhotos = copyOfDisplayedPhotos.concat(
+               addedPhotoObject
+            );
+            this.setState({
+               displayedPhotos: updatedDisplayedPhotos,
+            });
 
-         this.setState({ photoUrl: "" });
+            this.setState({ photoUrl: "" });
 
-         console.log("added to existing collection", addedPhotoObject);
+            console.log("added to existing collection", addedPhotoObject);
+         }
       }
    }
 
@@ -363,8 +312,8 @@ class AdminAddPhotoCollection extends React.Component {
             </div>
             {this.state.isDisplayingAddPhoto && (
                <>
-                  {/* <div className="row my-4"> */}
-                  {/* <div className="col-8">
+                  <div className="row my-4">
+                     <div className="col-8">
                         <input
                            className="form-control form-control-sm"
                            type="text"
@@ -382,42 +331,10 @@ class AdminAddPhotoCollection extends React.Component {
                         >
                            Add Photo
                         </button>
-                     </div> */}
-
-                  <form onSubmit={(e) => this.saveProfile(e)}>
-                     <div className="form-group">
-                        <div className="custom-file mb-6">
-                           <input
-                              type="file"
-                              className="custom-file-input"
-                              id="photo-upload"
-                              onChange={(e) => {
-                                 this.setPhotoUploadText(e);
-                              }}
-                           />
-
-                           <label
-                              className="custom-file-label"
-                              htmlFor="photo-upload"
-                           >
-                              {this.state.photoUploadText}
-                           </label>
-                        </div>
-
-                        <button
-                           className="btn btn-primary btn-block btn-sm"
-                           type="submit"
-                           // onClick={() => this.addPhoto()}
-                        >
-                           Add Photo
-                        </button>
                      </div>
-                  </form>
-
-                  {/* </div> */}
+                  </div>
                </>
             )}
-            {/* add photo from computer */}
 
             {/* <!-- Collection Name --> */}
             <hr className="mt-2 mb-5" />
