@@ -80,7 +80,7 @@ router.post("/", async (req, res) => {
 
 // @route   Delete api/v1/tags/:id
 // @desc    Delete tag selected by user
-// @access  Private
+// @access  Private test
 
 router.delete("/:id", validateJwt, (req, res) => {
    console.log("looking for tag id", req.params);
