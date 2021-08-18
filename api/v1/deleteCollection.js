@@ -3,7 +3,7 @@ const router = express.Router();
 const db = require("../../db");
 const validateJwt = require("../../utils/validatejwt");
 const deleteAllTagsForCollection = require("../../queries/deleteAllTagsForCollection");
-const toJson = require("../../crowd-tag-fullstack/utils/helpers");
+const toJson = require("../../utils/helpers");
 
 router.delete("/", validateJwt, (req, res) => {
    console.log("looking for collection", req.params);
