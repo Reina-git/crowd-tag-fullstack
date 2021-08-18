@@ -9,6 +9,7 @@ module.exports = function validateJwt(req, res, next) {
    try {
       // verify the token
       // if valid, extract the user payload
+      // test update
       const decodedPayload = jwt.verify(
          accessToken,
          process.env.JWT_ACCESS_SECRET

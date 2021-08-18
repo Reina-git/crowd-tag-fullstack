@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../../db");
-const validateJwt = require("../../utils/validatejwt");
+const validateJwt = require("../../utils/validateJwt");
 const deleteAllTagsForCollection = require("../../queries/deleteAllTagsForCollection");
 const toJson = require("../../utils/helpers");
 
