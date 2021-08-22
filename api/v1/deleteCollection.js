@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../../db");
-const validateJwt = require("../../utils/validateJwt");
+const validateJwtt = require("../../utils/validateJwtt");
 const deleteAllTagsForCollection = require("../../queries/deleteAllTagsForCollection");
 const toJson = require("../../utils/helpers");
 
-router.delete("/", validateJwt, (req, res) => {
+router.delete("/", validateJwtt, (req, res) => {
    console.log("looking for collection", req.params);
 
    const ids = req.params;

@@ -1,13 +1,13 @@
 // The queue resource
 const express = require("express");
 const router = express.Router();
-const validateJwt = require("../../utils/validateJwt");
+const validateJwtt = require("../../utils/validateJwtt");
 const upload = require("../../upload");
 
 // @route      POST api/v1/test-users
 // @desc       Create a new test user in the test users resource
 // @access     Private
-router.post("/", validateJwt, (req, res) => {
+router.post("/", validateJwtt, (req, res) => {
    const userId = req.user.id;
    console.log("made it to test-users route");
    upload.single("profile-photo")(req, res, (err) => {

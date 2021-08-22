@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../../db");
-const validateJwt = require("../../utils/validatejwt");
+const validateJwtt = require("../../utils/validateJwtt");
 const deleteAllTagsForPhoto = require("../../queries/deleteAllTagsForPhoto");
 const deletePhotoById = require("../../queries/deletePhotoById");
 
@@ -10,7 +10,7 @@ const deletePhotoById = require("../../queries/deletePhotoById");
 // @desc    Delete selectedUser
 // @access  Private
 
-router.delete("/:id", validateJwt, async (req, res) => {
+router.delete("/:id", validateJwtt, async (req, res) => {
    console.log("looking for tag id", req.params);
    const id = req.params.id;
 

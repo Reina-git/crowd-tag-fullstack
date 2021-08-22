@@ -6,7 +6,7 @@ const selectAdminCollections = require("../../queries/selectAdminCollections");
 // const groupBy = require("lodash/groupBy");
 // const { v4: getUuid } = require("uuid");
 const uniqBy = require("lodash/uniqBy");
-const validateJwt = require("../../utils/validatejwt");
+const validateJwtt = require("../../utils/validateJwtt");
 const insertCollection = require("../../queries/insertCollection");
 const insertPhotos = require("../../queries/insertPhotos");
 const updateCollection = require("../../queries/updateCollection");
@@ -16,7 +16,7 @@ const deleteAllTagsForPhoto = require("../../queries/deleteAllTagsForPhoto");
 const deleteAllTagsForCollection = require("../../queries/deleteAllTagsForCollection");
 const { get } = require("lodash");
 
-router.get("/", validateJwt, (req, res) => {
+router.get("/", validateJwtt, (req, res) => {
    // console.log("I am in adminAllCollections");
    const user_id = req.user.id;
    // console.log("user.id", user_id);
@@ -204,7 +204,7 @@ router.put("/", async (req, res) => {
 // @desc    Delete selectedCollection
 // @access  Private
 
-router.delete("/:id", validateJwt, (req, res) => {
+router.delete("/:id", validateJwtt, (req, res) => {
    // console.log("looking for collection", req.params);
    const id = req.params;
    console.log("delete tags with the photo ids:", id);

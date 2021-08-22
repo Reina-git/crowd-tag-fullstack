@@ -4,13 +4,13 @@ const router = express.Router();
 const db = require("../../db");
 const selectAllTags = require("../../queries/selectAllTags");
 const uniqBy = require("lodash/uniqBy");
-const validateJwt = require("../../utils/validateJwt");
+const validateJwtt = require("../../utils/validateJwtt");
 const insertTag = require("../../queries/insertTag");
 const insertXref = require("../../queries/insertXref");
 const deleteTagById = require("../../queries/deleteTagbyId");
 const deleteXrefById = require("../../queries/deleteXrefbyId");
 
-router.get("/", validateJwt, (req, res) => {
+router.get("/", validateJwtt, (req, res) => {
    const userId = req.user.id;
    //    console.log("user id", userId);
    const photoId = req.query.photoIdFromCollection;
@@ -41,7 +41,7 @@ router.get("/", validateJwt, (req, res) => {
 // @desc    Post all tags for a user
 // @access  Private
 
-// router.put("/", validateJwt, (req, res) => {
+// router.put("/", validateJwtt, (req, res) => {
 //     const user = req.user;
 //     db.query(insertTag, insertXref,)
 
@@ -82,7 +82,7 @@ router.post("/", async (req, res) => {
 // @desc    Delete tag selected by user
 // @access  Private test
 
-router.delete("/:id", validateJwt, (req, res) => {
+router.delete("/:id", validateJwtt, (req, res) => {
    console.log("looking for tag id", req.params);
    const id = req.params.id;
    db.query(deleteXrefById, id)

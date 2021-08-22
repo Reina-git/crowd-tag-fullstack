@@ -6,7 +6,7 @@ const selectAllCollections = require("../../queries/selectAllCollections");
 const groupBy = require("lodash/groupBy");
 const { v4: getUuid } = require("uuid");
 const uniqBy = require("lodash/uniqBy");
-const validateJwt = require("../../utils/validatejwt");
+const validateJwtt = require("../../utils/validateJwtt");
 
 router.get("/", (req, res) => {
    // console.log("req.query collections", req.query);
@@ -105,11 +105,11 @@ router.get("/", (req, res) => {
 // @desc    Post all collections for a library user
 // @access  Private
 
-router.post("/", validateJwt, (req, res) => {
+router.post("/", validateJwtt, (req, res) => {
    const user = req.user;
 });
 
-router.post("/", (req, validateJwt, res) => {
+router.post("/", (req, validateJwtt, res) => {
    db.query(selectAllCollections)
       .then((collections) => {
          const camelCaseCollections = collections.map((collection) => {
